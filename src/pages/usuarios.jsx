@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { usuarios as usuariosData } from '../data/mockData'
+import { supabase } from '../packages/supabase'
+import { useState, useEffect } from 'react'
 
 const BTN = { display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', borderRadius: 8, fontSize: 11, fontWeight: 600, cursor: 'pointer', border: 'none' }
 const INPUT = { padding: '7px 10px', borderRadius: 7, border: '1.5px solid #E2F0F4', fontSize: 11, color: '#1A3A5C', background: 'white', width: '100%', fontFamily: 'inherit' }
 
 function Modal({ user, onClose }) {
-  const empty = { nombre: '', usuario: '', rol: 'Cajero', activo: true }
+  const empty = { nombre_completo: '', nombre_usuario: '', rol: 'cajero', activo: true }
   const [form, setForm] = useState(user || empty)
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -19,11 +19,11 @@ function Modal({ user, onClose }) {
         <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
             <label style={{ fontSize: 10, fontWeight: 600, color: '#6A9BB5', display: 'block', marginBottom: 4 }}>NOMBRE COMPLETO</label>
-            <input value={form.nombre} onChange={e => set('nombre', e.target.value)} style={INPUT} />
+            <input value={form.nombre_completo} onChange={e => set('nombre_completo', e.target.value)} style={INPUT} />
           </div>
           <div>
             <label style={{ fontSize: 10, fontWeight: 600, color: '#6A9BB5', display: 'block', marginBottom: 4 }}>NOMBRE DE USUARIO</label>
-            <input value={form.usuario} onChange={e => set('usuario', e.target.value)} style={INPUT} />
+            <input value={form.nombre_usuario} onChange={e => set('nombre_usuario', e.target.value)} style={INPUT} />
           </div>
           {!user && (
             <div>
@@ -56,9 +56,23 @@ function Modal({ user, onClose }) {
 }
 
 export default function Usuarios() {
-  const [usuarios] = useState(usuariosData)
+  const [usuarios, setUsuarios] = useState([])
   const [modal, setModal] = useState(false)
   const [editUser, setEditUser] = useState(null)
+
+  useEffect(() => {
+    fetchUsuarios()
+  }, [])
+
+  const fetchUsuarios = async () => {
+    const { data, error } = await supabase
+      .from('usuario')
+      .select('*')
+      .order('id_usuario', { ascending: true })
+    
+    if (error) console.error("Error cargando usuarios:", error.message)
+    else setUsuarios(data)
+  }
 
   return (
     <>
@@ -75,21 +89,21 @@ export default function Usuarios() {
       {/* Cards de usuarios */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
         {usuarios.map(u => {
-          const initials = u.nombre.split(' ').slice(0, 2).map(n => n[0]).join('')
+          const initials = u.nombre_completo ? u.nombre_completo.split(' ').slice(0, 2).map(n => n[0]).join('') : '??'
           return (
-            <div key={u.id} style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', padding: 16, boxShadow: '0 2px 8px rgba(11,31,75,.04)' }}>
+            <div key={u.id_usuario} style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', padding: 16, boxShadow: '0 2px 8px rgba(11,31,75,.04)' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <div style={{ width: 42, height: 42, borderRadius: 12, background: 'linear-gradient(135deg,#5BBFCC,#3A6E9E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: 'white' }}>{initials}</div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}>{u.nombre}</div>
-                    <div style={{ fontSize: 10, color: '#6A9BB5' }}>@{u.usuario}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}>{u.nombre_completo}</div>
+                    <div style={{ fontSize: 10, color: '#6A9BB5' }}>@{u.nombre_usuario}</div>
                   </div>
                 </div>
                 <span style={{ fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 5, background: u.activo ? '#DCFCE7' : '#FEE2E2', color: u.activo ? '#166534' : '#991B1B' }}>{u.activo ? 'Activo' : 'Inactivo'}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 9, fontWeight: 600, padding: '3px 9px', borderRadius: 6, background: u.rol === 'Admin' ? '#1A3A5C' : '#DFF4F7', color: u.rol === 'Admin' ? 'white' : '#3A6E9E' }}>{u.rol}</span>
+                <span style={{ fontSize: 9, fontWeight: 600, padding: '3px 9px', borderRadius: 6, background: u.rol === 'administrador' ? '#1A3A5C' : '#DFF4F7', color: u.rol === 'administrador' ? 'white' : '#3A6E9E', textTransform: 'capitalize' }}>{u.rol}</span>
                 <button onClick={() => { setEditUser(u); setModal(true) }} style={{ background: '#EEF1FA', border: 'none', color: '#2A5278', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>✏️ Editar</button>
               </div>
             </div>

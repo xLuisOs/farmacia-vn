@@ -15,8 +15,13 @@ const NAV = [
 
 const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios']
 
-export default function Layout({ activePage, setActivePage, children }) {
+export default function Layout({ activePage, setActivePage, children, user, onLogout }) {
   const [clock, setClock] = useState('')
+
+  const getInitials = (name) => {
+    if (!name) return '??';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+  }
 
   useEffect(() => {
     const tick = () => setClock(new Date().toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit', hour12: true }))
@@ -53,11 +58,17 @@ export default function Layout({ activePage, setActivePage, children }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ color: '#8fa3c8', fontSize: 10 }}>🕐 {clock}</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.08)', borderRadius: 20, padding: '4px 10px 4px 6px' }}>
-            <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg,#2BC5D4,#1a7fc1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: 'white' }}>JG</div>
+          <div 
+            onClick={onLogout}
+            title="Cerrar Sesión"
+            style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.08)', borderRadius: 20, padding: '4px 10px 4px 6px', cursor: 'pointer' }}
+          >
+            <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg,#2BC5D4,#1a7fc1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: 'white' }}>
+               {getInitials(user?.nombre_completo)}
+            </div>
             <div>
-              <div style={{ color: '#cdd8ee', fontSize: 10 }}>Jorge García</div>
-              <div style={{ color: '#5BBFCC', fontSize: 9, fontWeight: 600 }}>ADMINISTRADOR</div>
+              <div style={{ color: '#cdd8ee', fontSize: 10 }}>{user?.nombre_completo || 'Usuario'}</div>
+              <div style={{ color: '#5BBFCC', fontSize: 9, fontWeight: 600 }}>{user?.rol?.toUpperCase() || 'ROL'}</div>
             </div>
           </div>
         </div>
@@ -116,19 +127,21 @@ export default function Layout({ activePage, setActivePage, children }) {
             )
           })}
 
-          {/* Bottom user */}
           <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,.06)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg,#5BBFCC,#3A6E9E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: 'white' }}>JG</div>
+              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg,#5BBFCC,#3A6E9E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: 'white' }}>
+                {getInitials(user?.nombre_completo)}
+              </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: '#cdd8ee' }}>Jorge García</div>
-                <span style={{ fontSize: 9, fontWeight: 600, color: '#5BBFCC', background: 'rgba(43,197,212,.15)', padding: '1px 6px', borderRadius: 4, display: 'inline-block', marginTop: 2 }}>ADMINISTRADOR</span>
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#cdd8ee' }}>{user?.nombre_completo || 'Usuario'}</div>
+                <span style={{ fontSize: 9, fontWeight: 600, color: '#5BBFCC', background: 'rgba(43,197,212,.15)', padding: '1px 6px', borderRadius: 4, display: 'inline-block', marginTop: 2 }}>
+                  {user?.rol?.toUpperCase() || 'ROL'}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── MAIN CONTENT ── */}
         <div style={{ flex: 1, background: '#F0F8FA', overflowY: 'auto', padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
           {children}
         </div>
