@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react'
 const NAV = [
   { id: 'dashboard',   icon: '📊', label: 'Dashboard',          section: 'Menú principal' },
   { id: 'ventas',      icon: '🛒', label: 'Ventas',              section: null },
-  { id: 'inventario',  icon: '📦', label: 'Inventario',          section: null, badge: '5', badgeColor: '#F59E0B' },
+  { id: 'inventario',  icon: '📦', label: 'Inventario',          section: null }, // Se quitó el badge '5'
   { id: 'compras',     icon: '🏪', label: 'Compras',             section: null },
   { id: 'facturacion', icon: '🧾', label: 'Facturación',         section: null },
   { id: 'r-ventas',    icon: '📈', label: 'Ventas diarias',      section: 'Reportes' },
   { id: 'r-ingresos',  icon: '💰', label: 'Ingresos vs Egresos', section: null },
-  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: null, badge: '3', badgeColor: '#E05C6A' },
+  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: null }, // Se quitó el badge '3'
   { id: 'usuarios',    icon: '👥', label: 'Usuarios',            section: 'Admin' },
   { id: 'config',      icon: '⚙️', label: 'Configuración',       section: null },
 ]
@@ -32,7 +32,6 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-
       {/* ── TITLEBAR ── */}
       <div style={{
         background: 'linear-gradient(90deg, #1A3A5C 0%, #2A5278 100%)',
@@ -74,9 +73,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
         </div>
       </div>
 
-      {/* ── BODY ── */}
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-
         {/* ── SIDEBAR ── */}
         <div style={{
           width: 230,
@@ -108,8 +105,6 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
                     margin: '1px 0',
                     transition: 'background .15s',
                   }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,.05)' }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent' }}
                 >
                   <div style={{ width: 30, height: 30, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, background: isActive ? 'rgba(43,197,212,.2)' : 'rgba(255,255,255,.06)' }}>
                     {item.icon}
@@ -117,35 +112,15 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
                   <span style={{ fontSize: 12, fontWeight: isActive ? 600 : 500, color: isActive ? '#7FD4DE' : '#a0b3d6' }}>
                     {item.label}
                   </span>
-                  {item.badge && (
-                    <span style={{ marginLeft: 'auto', background: item.badgeColor, color: 'white', fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 10 }}>
-                      {item.badge}
-                    </span>
-                  )}
                 </div>
               </div>
             )
           })}
-
-          <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,.06)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg,#5BBFCC,#3A6E9E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: 'white' }}>
-                {getInitials(user?.nombre_completo)}
-              </div>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: '#cdd8ee' }}>{user?.nombre_completo || 'Usuario'}</div>
-                <span style={{ fontSize: 9, fontWeight: 600, color: '#5BBFCC', background: 'rgba(43,197,212,.15)', padding: '1px 6px', borderRadius: 4, display: 'inline-block', marginTop: 2 }}>
-                  {user?.rol?.toUpperCase() || 'ROL'}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div style={{ flex: 1, background: '#F0F8FA', overflowY: 'auto', padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ flex: 1, background: '#F0F8FA', overflowY: 'auto', padding: 18 }}>
           {children}
         </div>
-
       </div>
     </div>
   )
