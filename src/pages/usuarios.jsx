@@ -5,9 +5,41 @@ const BTN = { display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px'
 const INPUT = { padding: '7px 10px', borderRadius: 7, border: '1.5px solid #E2F0F4', fontSize: 11, color: '#1A3A5C', background: 'white', width: '100%', fontFamily: 'inherit' }
 
 function Modal({ user, onClose }) {
-  const empty = { nombre_completo: '', nombre_usuario: '', rol: 'cajero', activo: true }
+  const empty = { nombre_completo: '', nombre_usuario: '', rol: 'cajero', activo: true, password_hash: '' }
   const [form, setForm] = useState(user || empty)
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+const guardar = async () => {
+    try {
+      let datosAEnviar = { ...form };
+      
+      // Si estamos editando y no escribimos nada en contraseña, la quitamos del envío
+      if (user && !datosAEnviar.password_hash) delete datosAEnviar.password_hash;
+
+      let error;
+      if (user) {
+        // ACTUALIZAR (UPDATE)
+        const { error: err } = await supabase
+          .from('usuario')
+          .update(datosAEnviar)
+          .eq('id_usuario', user.id_usuario);
+        error = err;
+      } else {
+        // INSERTAR NUEVO (INSERT)
+        const { error: err } = await supabase
+          .from('usuario')
+          .insert([datosAEnviar]);
+        error = err;
+      }
+
+      if (error) throw error;
+      alert("¡Usuario guardado con éxito! ✨");
+      onClose();
+      window.location.reload(); 
+    } catch (error) {
+      alert("Error al guardar: " + error.message);
+    }
+  };
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
@@ -28,18 +60,18 @@ function Modal({ user, onClose }) {
           {!user && (
             <div>
               <label style={{ fontSize: 10, fontWeight: 600, color: '#6A9BB5', display: 'block', marginBottom: 4 }}>CONTRASEÑA</label>
-              <input type="password" placeholder="••••••••" style={INPUT} />
+              <input type="password" placeholder="••••••••" style={INPUT} onChange={e => set('password_hash', e.target.value)}/>
             </div>
           )}
           <div>
             <label style={{ fontSize: 10, fontWeight: 600, color: '#6A9BB5', display: 'block', marginBottom: 6 }}>ROL</label>
             <div style={{ display: 'flex', gap: 8 }}>
-              {['Admin', 'Cajero'].map(r => (
+              {['administrador', 'cajero'].map(r => (
                 <button key={r} onClick={() => set('rol', r)} style={{ padding: '6px 20px', borderRadius: 7, border: `1.5px solid ${form.rol === r ? '#1A3A5C' : '#E2F0F4'}`, background: form.rol === r ? '#1A3A5C' : 'white', color: form.rol === r ? 'white' : '#6A9BB5', fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>{r}</button>
               ))}
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, textTransform: 'capitalize'}}>
             <label style={{ fontSize: 10, fontWeight: 600, color: '#6A9BB5' }}>ESTADO</label>
             <button onClick={() => set('activo', !form.activo)} style={{ padding: '5px 12px', borderRadius: 7, border: `1.5px solid ${form.activo ? '#3DBD8A' : '#E05C6A'}`, background: form.activo ? '#DCFCE7' : '#FEE2E2', color: form.activo ? '#166534' : '#991B1B', fontSize: 10, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
               {form.activo ? '✅ Activo' : '❌ Inactivo'}
@@ -47,7 +79,7 @@ function Modal({ user, onClose }) {
           </div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', paddingTop: 8, borderTop: '1px solid #E2F0F4' }}>
             <button onClick={onClose} style={{ ...BTN, background: 'white', color: '#1A3A5C', border: '1.5px solid #E2F0F4', fontFamily: 'inherit' }}>Cancelar</button>
-            <button onClick={onClose} style={{ ...BTN, background: '#1A3A5C', color: 'white', fontFamily: 'inherit' }}>💾 Guardar</button>
+            <button onClick={guardar} style={{ ...BTN, background: '#1A3A5C', color: 'white', fontFamily: 'inherit' }}>💾 Guardar</button>
           </div>
         </div>
       </div>
@@ -66,6 +98,7 @@ export default function Usuarios() {
 
   const fetchUsuarios = async () => {
     const { data, error } = await supabase
+      .schema('farmacia')
       .from('usuario')
       .select('*')
       .order('id_usuario', { ascending: true })

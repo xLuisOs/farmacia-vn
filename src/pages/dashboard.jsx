@@ -35,20 +35,23 @@ export default function Dashboard() {
 
       // 1. Consultar productos con bajo stock (ejemplo: menos de 10 unidades)
       const { data: stockData, count: bajoStockCount } = await supabase
+        .schema('farmacia')
         .from('producto')
         .select('nombre, stock_actual', { count: 'exact' })
         .lt('stock_actual', 10)
         .limit(5)
 
-      // 2. Consultar productos por vencer en los próximos 30 días
+// 2. Consultar productos por vencer (en tu script es la tabla 'lote')
       const { count: vencerCount } = await supabase
-        .from('producto')
+        .schema('farmacia')
+        .from('lote') // En tu DB la fecha está en 'lote', no en 'producto'
         .select('*', { count: 'exact', head: true })
         .lte('fecha_vencimiento', fechaLimite)
         .gte('fecha_vencimiento', hoy)
 
       // 3. Consultar ventas e ingresos del día (de la tabla venta)
       const { data: ventasData } = await supabase
+        .schema('farmacia')
         .from('venta')
         .select('total')
         .gte('fecha_venta', `${hoy}T00:00:00`)
