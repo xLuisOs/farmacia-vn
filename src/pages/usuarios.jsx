@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 const BTN = { display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', borderRadius: 8, fontSize: 11, fontWeight: 600, cursor: 'pointer', border: 'none' }
 const INPUT = { padding: '7px 10px', borderRadius: 7, border: '1.5px solid #E2F0F4', fontSize: 11, color: '#1A3A5C', background: 'white', width: '100%', fontFamily: 'inherit' }
 
-function Modal({ user, onClose }) {
+function Modal({ user, onClose, onSaved }) {
   const empty = { nombre_completo: '', nombre_usuario: '', rol: 'cajero', activo: true, password_hash: '' }
   const [form, setForm] = useState(user || empty)
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -35,7 +35,7 @@ const guardar = async () => {
       if (error) throw error;
       alert("¡Usuario guardado con éxito! ✨");
       onClose();
-      window.location.reload(); 
+      if (onSaved) onSaved();
     } catch (error) {
       alert("Error al guardar: " + error.message);
     }
@@ -109,7 +109,7 @@ export default function Usuarios() {
 
   return (
     <>
-      {modal && <Modal user={editUser} onClose={() => { setModal(false); setEditUser(null) }} />}
+      {modal && <Modal user={editUser} onClose={() => { setModal(false); setEditUser(null) }} onSaved={fetchUsuarios} />}
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
