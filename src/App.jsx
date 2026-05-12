@@ -69,7 +69,7 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F0F8FA' }}>
       <Layout activePage={activePage} setActivePage={setActivePage} onLogout={handleLogout} user={user}>
-        <PageComponent setActivePage={setActivePage} />
+        <PageComponent setActivePage={setActivePage} user={user} />
       </Layout>
     </div>
   )
