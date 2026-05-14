@@ -640,7 +640,7 @@ export default function Compras({ user }) {
       <div style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', overflow: 'hidden', marginBottom: 16 }}>
         <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2F0F4' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}>🤝 Proveedores</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}> Proveedores</div>
             <span style={{ background: '#1A3A5C', color: 'white', fontSize: 9, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
               {proveedores.length}
             </span>
@@ -671,9 +671,9 @@ export default function Compras({ user }) {
                     {p.activo ? 'Activo' : 'Inactivo'}
                   </span>
                 </div>
-                {p.contacto && <div style={{ fontSize: 10, color: '#6A9BB5' }}>👤 {p.contacto}</div>}
+                {p.contacto && <div style={{ fontSize: 10, color: '#6A9BB5' }}> {p.contacto}</div>}
                 {p.telefono && <div style={{ fontSize: 10, color: '#6A9BB5' }}>📞 {p.telefono}</div>}
-                {p.email && <div style={{ fontSize: 10, color: '#6A9BB5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>✉️ {p.email}</div>}
+                {p.email && <div style={{ fontSize: 10, color: '#6A9BB5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}> {p.email}</div>}
               </div>
             ))}
           </div>
