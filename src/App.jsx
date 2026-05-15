@@ -8,6 +8,7 @@ import Facturacion from './pages/facturacion'
 import Usuarios from './pages/usuarios'
 import Login from './pages/login'
 import { supabase } from './packages/supabase'
+import ReporteVentas from './pages/reporteVentas'
 
 const PAGES = {
   dashboard:   { component: Dashboard,    roles: ['administrador', 'cajero'] },
@@ -16,6 +17,7 @@ const PAGES = {
   compras:     { component: Compras,      roles: ['administrador'] },
   facturacion: { component: Facturacion,  roles: ['administrador', 'cajero'] },
   usuarios:    { component: Usuarios,     roles: ['administrador'] },
+  'r-ventas':  { component: ReporteVentas, roles: ['administrador'] },
 }
 
 // Pantalla de acceso denegado

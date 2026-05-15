@@ -13,7 +13,7 @@ const NAV = [
   { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador'] },
 ]
 
-const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios']
+const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios', 'r-ventas']
 
 export default function Layout({ activePage, setActivePage, children, user, onLogout }) {
   const [clock, setClock] = useState('')
