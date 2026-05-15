@@ -33,7 +33,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
   const navFiltrado = NAV.filter(item => item.roles.includes(user?.rol))
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
       {/* ── TITLEBAR ── */}
       <div style={{
@@ -81,13 +81,15 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
         {/* ── SIDEBAR ── */}
         <div style={{
           width: 230,
+          flex: '0 0 230px',
+          height: '100%',
           background: 'linear-gradient(180deg, #1A3A5C 0%, #224868 100%)',
           display: 'flex',
           flexDirection: 'column',
-          padding: '16px 0',
-          flexShrink: 0,
+          paddingTop: '16px',
+          paddingBottom: '16px',
           borderRight: '1px solid rgba(91,191,204,.2)',
-          overflowY: 'auto',
+          boxSizing: 'border-box',
         }}>
           {navFiltrado.map((item, index) => {
             const isActive = activePage === item.id
