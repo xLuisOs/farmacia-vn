@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 
 const NAV = [
-  { id: 'dashboard',   icon: '📊', label: 'Dashboard',          section: 'Menú principal' },
-  { id: 'ventas',      icon: '🛒', label: 'Ventas',              section: null },
-  { id: 'inventario',  icon: '📦', label: 'Inventario',          section: null }, // Se quitó el badge '5'
-  { id: 'compras',     icon: '🏪', label: 'Compras',             section: null },
-  { id: 'facturacion', icon: '🧾', label: 'Facturación',         section: null },
-  { id: 'r-ventas',    icon: '📈', label: 'Ventas diarias',      section: 'Reportes' },
-  { id: 'r-ingresos',  icon: '💰', label: 'Ingresos vs Egresos', section: null },
-  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: null }, // Se quitó el badge '3'
-  { id: 'usuarios',    icon: '👥', label: 'Usuarios',            section: 'Admin' },
-  { id: 'config',      icon: '⚙️', label: 'Configuración',       section: null },
+  { id: 'dashboard',   icon: '📊', label: 'Dashboard',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'ventas',      icon: '🛒', label: 'Ventas',              section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'inventario',  icon: '📦', label: 'Inventario',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'compras',     icon: '🏪', label: 'Compras',             section: 'Menú principal', roles: ['administrador'] },
+  { id: 'facturacion', icon: '🧾', label: 'Facturación',         section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'r-ventas',    icon: '📈', label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador'] },
+  { id: 'r-ingresos',  icon: '💰', label: 'Ingresos vs Egresos', section: 'Reportes',       roles: ['administrador'] },
+  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: 'Reportes',       roles: ['administrador'] },
+  { id: 'usuarios',    icon: '👥', label: 'Usuarios',            section: 'Admin',          roles: ['administrador'] },
+  { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador'] },
 ]
 
 const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios']
@@ -19,8 +19,8 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
   const [clock, setClock] = useState('')
 
   const getInitials = (name) => {
-    if (!name) return '??';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+    if (!name) return '??'
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)
   }
 
   useEffect(() => {
@@ -30,8 +30,11 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
     return () => clearInterval(t)
   }, [])
 
+  const navFiltrado = NAV.filter(item => item.roles.includes(user?.rol))
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+
       {/* ── TITLEBAR ── */}
       <div style={{
         background: 'linear-gradient(90deg, #1A3A5C 0%, #2A5278 100%)',
@@ -57,13 +60,13 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ color: '#8fa3c8', fontSize: 10 }}>🕐 {clock}</span>
-          <div 
+          <div
             onClick={onLogout}
             title="Cerrar Sesión"
             style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.08)', borderRadius: 20, padding: '4px 10px 4px 6px', cursor: 'pointer' }}
           >
             <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg,#2BC5D4,#1a7fc1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: 'white' }}>
-               {getInitials(user?.nombre_completo)}
+              {getInitials(user?.nombre_completo)}
             </div>
             <div>
               <div style={{ color: '#cdd8ee', fontSize: 10 }}>{user?.nombre_completo || 'Usuario'}</div>
@@ -74,6 +77,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
       </div>
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+
         {/* ── SIDEBAR ── */}
         <div style={{
           width: 230,
@@ -85,12 +89,15 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
           borderRight: '1px solid rgba(91,191,204,.2)',
           overflowY: 'auto',
         }}>
-          {NAV.map((item) => {
+          {navFiltrado.map((item, index) => {
             const isActive = activePage === item.id
+            const seccionAnterior = index > 0 ? navFiltrado[index - 1].section : null
+            const mostrarSeccion = item.section !== seccionAnterior
+
             return (
               <div key={item.id}>
-                {item.section && (
-                  <div style={{ fontSize: 9, fontWeight: 700, color: '#6A9BB5', letterSpacing: '1.2px', textTransform: 'uppercase', padding: '0 16px 6px', marginTop: 10 }}>
+                {mostrarSeccion && (
+                  <div style={{ fontSize: 9, fontWeight: 700, color: '#6A9BB5', letterSpacing: '1.2px', textTransform: 'uppercase', padding: '0 16px 6px', marginTop: index === 0 ? 0 : 10 }}>
                     {item.section}
                   </div>
                 )}
@@ -118,9 +125,11 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
           })}
         </div>
 
+        {/* ── CONTENIDO ── */}
         <div style={{ flex: 1, background: '#F0F8FA', overflowY: 'auto', padding: 18 }}>
           {children}
         </div>
+
       </div>
     </div>
   )
