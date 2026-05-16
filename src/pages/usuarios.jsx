@@ -87,7 +87,7 @@ const guardar = async () => {
   )
 }
 
-export default function Usuarios() {
+export default function Usuarios({ darkMode }) {
   const [usuarios, setUsuarios] = useState([])
   const [modal, setModal] = useState(false)
   const [editUser, setEditUser] = useState(null)
@@ -113,8 +113,8 @@ export default function Usuarios() {
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1A3A5C' }}>Usuarios</div>
-          <div style={{ fontSize: 11, color: '#6A9BB5' }}>Gestión de accesos al sistema</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Usuarios</div>
+          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Gestión de accesos al sistema</div>
         </div>
         <button onClick={() => { setEditUser(null); setModal(true) }} style={{ ...BTN, background: '#1A3A5C', color: 'white', fontFamily: 'inherit' }}>➕ Nuevo usuario</button>
       </div>

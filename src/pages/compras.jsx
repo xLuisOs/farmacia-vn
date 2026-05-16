@@ -529,7 +529,7 @@ function ModalNuevaCompra({ proveedores, productos, usuario, onClose, onGuardado
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
-export default function Compras({ user }) {
+export default function Compras({ user, darkMode }) {
   const [proveedores, setProveedores] = useState([])
   const [compras, setCompras] = useState([])
   const [productos, setProductos] = useState([])
@@ -603,8 +603,8 @@ export default function Compras({ user }) {
       {/* ─── Header de página ─────────────────────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1A3A5C' }}>Compras</div>
-          <div style={{ fontSize: 11, color: '#6A9BB5' }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Compras</div>
+          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>
             Registro de órdenes de compra y generación de lotes
           </div>
         </div>

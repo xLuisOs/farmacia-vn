@@ -186,7 +186,7 @@ function FilaVenta({ venta }) {
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
-export default function ReporteVentas() {
+export default function ReporteVentas({ darkMode }) {
   // Fecha seleccionada — por defecto hoy en zona Guatemala
   const hoyStr = new Date().toLocaleDateString('en-CA', { timeZone: ZONA }) // "YYYY-MM-DD"
   const [fechaSeleccionada, setFechaSeleccionada] = useState(hoyStr)
@@ -268,8 +268,8 @@ export default function ReporteVentas() {
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1A3A5C' }}>Ventas diarias</div>
-          <div style={{ fontSize: 11, color: '#6A9BB5', textTransform: 'capitalize', marginTop: 2 }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Ventas diarias</div>
+          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5', textTransform: 'capitalize', marginTop: 2 }}>
             {fechaBonita} {esHoy && <span style={{ background: '#5BBFCC', color: 'white', fontSize: 9, fontWeight: 700, padding: '1px 7px', borderRadius: 10, marginLeft: 6 }}>HOY</span>}
           </div>
         </div>

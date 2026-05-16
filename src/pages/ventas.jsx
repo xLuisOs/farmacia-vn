@@ -15,13 +15,19 @@ const TD = {
   borderBottom: '1px solid #E2F0F4'
 }
 const BTN_PRIMARY = {
-  display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px',
-  borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer',
-  border: 'none', background: '#1A3A5C', color: 'white', fontFamily: 'inherit'
+  display: 'flex', alignItems: 'center', gap: 8, padding: '10px 24px',
+  borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: 'pointer',
+  border: 'none', background: '#06B6D4', color: 'white', fontFamily: 'inherit',
+  boxShadow: '0 10px 15px rgba(6,182,212,.2)', transition: 'all .2s'
+}
+const BTN_PRIMARY_HOVER = {
+  ...BTN_PRIMARY,
+  background: '#0891B2'
 }
 const BTN_SECONDARY = {
-  ...BTN_PRIMARY,
-  background: 'white', color: '#1A3A5C', border: '1.5px solid #E2F0F4'
+  display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px',
+  borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+  border: '1.5px solid #E2F0F4', background: 'white', color: '#1A3A5C', fontFamily: 'inherit'
 }
 const INPUT = {
   padding: '8px 10px', borderRadius: 7, border: '1.5px solid #E2F0F4',
@@ -151,14 +157,14 @@ function PasoFacturacion({ idVenta, total, onFacturado }) {
         disabled={guardando}
         style={{
           ...BTN_PRIMARY, fontFamily: 'inherit', justifyContent: 'center',
-          background: guardando ? '#E2F0F4' : '#1A3A5C',
-          color: guardando ? '#A8CEDD' : 'white',
+          background: guardando ? '#E0F7FA' : '#06B6D4',
+          color: guardando ? '#80DEEA' : 'white',
           cursor: guardando ? 'not-allowed' : 'pointer',
-          padding: '10px 16px', fontSize: 12
+          fontSize: 12
         }}
       >
         {guardando
-          ? <><span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid #A8CEDD', borderTopColor: 'white', borderRadius: '50%', animation: 'spin .7s linear infinite' }} /> Emitiendo...</>
+          ? <><span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid #80DEEA', borderTopColor: 'white', borderRadius: '50%', animation: 'spin .7s linear infinite' }} /> Emitiendo...</>
           : <><FiFileText size={13} /> Emitir factura</>
         }
       </button>
@@ -489,7 +495,7 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
-export default function Ventas({ user }) {
+export default function Ventas({ user, darkMode }) {
   const [ventas, setVentas] = useState([])
   const [productos, setProductos] = useState([])
   const [loading, setLoading] = useState(true)
@@ -554,15 +560,15 @@ export default function Ventas({ user }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1A3A5C' }}>Ventas</div>
-          <div style={{ fontSize: 11, color: '#6A9BB5' }}>Registro de ventas · descuento FIFO automático</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Ventas</div>
+          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Registro de ventas · descuento FIFO automático</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={cargarDatos} style={{ ...BTN_SECONDARY, fontFamily: 'inherit', padding: '8px 12px' }}>
             <FiRefreshCw size={13} />
           </button>
-          <button onClick={() => setModalAbierto(true)} style={{ ...BTN_PRIMARY, fontFamily: 'inherit', padding: '8px 18px' }}>
-            <FiPlus size={14} /> Nueva venta
+          <button onClick={() => setModalAbierto(true)} style={{ ...BTN_PRIMARY, fontFamily: 'inherit' }}>
+            <FiPlus size={16} /> Nueva venta
           </button>
         </div>
       </div>

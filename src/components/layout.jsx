@@ -10,12 +10,12 @@ const NAV = [
   { id: 'r-ingresos',  icon: '💰', label: 'Ingresos vs Egresos', section: 'Reportes',       roles: ['administrador'] },
   { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: 'Reportes',       roles: ['administrador'] },
   { id: 'usuarios',    icon: '👥', label: 'Usuarios',            section: 'Admin',          roles: ['administrador'] },
-  { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador'] },
+  { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador', 'cajero'] },
 ]
 
-const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios', 'r-ventas']
+const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios', 'r-ventas', 'config']
 
-export default function Layout({ activePage, setActivePage, children, user, onLogout }) {
+export default function Layout({ activePage, setActivePage, children, user, onLogout, darkMode, setDarkMode }) {
   const [clock, setClock] = useState('')
 
   const getInitials = (name) => {
@@ -32,18 +32,36 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
 
   const navFiltrado = NAV.filter(item => item.roles.includes(user?.rol))
 
+  // Colores dinámicos según modo oscuro
+  const colors = {
+    titlebarBg: 'linear-gradient(90deg, #1A3A5C 0%, #2A5278 100%)',
+    titlebarDarkBg: 'linear-gradient(90deg, #0f1419 0%, #1a2332 100%)',
+    sidebarBg: 'linear-gradient(180deg, #1A3A5C 0%, #224868 100%)',
+    sidebarDarkBg: 'linear-gradient(180deg, #0f1419 0%, #1a2332 100%)',
+    contentBg: '#F0F8FA',
+    contentDarkBg: '#1a1f2e',
+    textPrimary: '#1A3A5C',
+    textPrimaryDark: '#ffffff',
+    textSecondary: '#6A9BB5',
+    textSecondaryDark: '#a0aec0',
+    cardBg: '#ffffff',
+    cardDarkBg: '#2d3748',
+    borderLight: '#E2F0F4',
+    borderDark: '#3f4d5f',
+  }
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', background: darkMode ? colors.contentDarkBg : colors.contentBg }}>
 
       {/* ── TITLEBAR ── */}
       <div style={{
-        background: 'linear-gradient(90deg, #1A3A5C 0%, #2A5278 100%)',
+        background: darkMode ? colors.titlebarDarkBg : colors.titlebarBg,
         height: 44,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 16px',
-        borderBottom: '2px solid #5BBFCC',
+        borderBottom: `2px solid ${darkMode ? '#2BC5D4' : '#5BBFCC'}`,
         flexShrink: 0,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -83,12 +101,12 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
           width: 230,
           flex: '0 0 230px',
           height: '100%',
-          background: 'linear-gradient(180deg, #1A3A5C 0%, #224868 100%)',
+          background: darkMode ? colors.sidebarDarkBg : colors.sidebarBg,
           display: 'flex',
           flexDirection: 'column',
           paddingTop: '16px',
           paddingBottom: '16px',
-          borderRight: '1px solid rgba(91,191,204,.2)',
+          borderRight: `1px solid ${darkMode ? 'rgba(43,197,212,.1)' : 'rgba(91,191,204,.2)'}`,
           boxSizing: 'border-box',
         }}>
           {navFiltrado.map((item, index) => {
@@ -99,7 +117,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
             return (
               <div key={item.id}>
                 {mostrarSeccion && (
-                  <div style={{ fontSize: 9, fontWeight: 700, color: '#6A9BB5', letterSpacing: '1.2px', textTransform: 'uppercase', padding: '0 16px 6px', marginTop: index === 0 ? 0 : 10 }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: darkMode ? '#708090' : '#6A9BB5', letterSpacing: '1.2px', textTransform: 'uppercase', padding: '0 16px 6px', marginTop: index === 0 ? 0 : 10 }}>
                     {item.section}
                   </div>
                 )}
@@ -110,15 +128,15 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
                     padding: '9px 16px',
                     cursor: ROUTABLE.includes(item.id) ? 'pointer' : 'default',
                     borderLeft: isActive ? '3px solid #5BBFCC' : '3px solid transparent',
-                    background: isActive ? 'rgba(43,197,212,.12)' : 'transparent',
+                    background: isActive ? (darkMode ? 'rgba(43,197,212,.1)' : 'rgba(43,197,212,.12)') : 'transparent',
                     margin: '1px 0',
                     transition: 'background .15s',
                   }}
                 >
-                  <div style={{ width: 30, height: 30, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, background: isActive ? 'rgba(43,197,212,.2)' : 'rgba(255,255,255,.06)' }}>
+                  <div style={{ width: 30, height: 30, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, background: isActive ? (darkMode ? 'rgba(43,197,212,.15)' : 'rgba(43,197,212,.2)') : (darkMode ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.06)') }}>
                     {item.icon}
                   </div>
-                  <span style={{ fontSize: 12, fontWeight: isActive ? 600 : 500, color: isActive ? '#7FD4DE' : '#a0b3d6' }}>
+                  <span style={{ fontSize: 12, fontWeight: isActive ? 600 : 500, color: isActive ? '#7FD4DE' : (darkMode ? '#cbd5e1' : '#a0b3d6') }}>
                     {item.label}
                   </span>
                 </div>
@@ -128,7 +146,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
         </div>
 
         {/* ── CONTENIDO ── */}
-        <div style={{ flex: 1, background: '#F0F8FA', overflowY: 'auto', padding: 18 }}>
+        <div style={{ flex: 1, background: darkMode ? colors.contentDarkBg : colors.contentBg, overflowY: 'auto', padding: 18 }}>
           {children}
         </div>
 

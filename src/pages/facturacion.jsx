@@ -14,9 +14,14 @@ const TD = {
   borderBottom: '1px solid #E2F0F4'
 }
 const BTN_PRIMARY = {
-  display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px',
-  borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer',
-  border: 'none', background: '#1A3A5C', color: 'white', fontFamily: 'inherit'
+  display: 'flex', alignItems: 'center', gap: 8, padding: '10px 24px',
+  borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: 'pointer',
+  border: 'none', background: '#06B6D4', color: 'white', fontFamily: 'inherit',
+  boxShadow: '0 10px 15px rgba(6,182,212,.2)', transition: 'all .2s'
+}
+const BTN_PRIMARY_HOVER = {
+  ...BTN_PRIMARY,
+  background: '#0891B2'
 }
 const BTN_SECONDARY = {
   ...BTN_PRIMARY,
@@ -207,13 +212,13 @@ function ModalEmitirFactura({ ventasSinFactura, onClose, onGuardado }) {
               style={{
                 ...BTN_PRIMARY,
                 fontFamily: 'inherit',
-                background: (!idVenta || guardando || exito) ? '#E2F0F4' : '#1A3A5C',
-                color: (!idVenta || guardando || exito) ? '#A8CEDD' : 'white',
+                background: (!idVenta || guardando || exito) ? '#E0F7FA' : '#06B6D4',
+                color: (!idVenta || guardando || exito) ? '#80DEEA' : 'white',
                 cursor: (!idVenta || guardando || exito) ? 'not-allowed' : 'pointer',
               }}
             >
               {guardando
-                ? <><span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid #A8CEDD', borderTopColor: 'white', borderRadius: '50%', animation: 'spin .7s linear infinite' }} /> Emitiendo…</>
+                ? <><span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid #80DEEA', borderTopColor: 'white', borderRadius: '50%', animation: 'spin .7s linear infinite' }} /> Emitiendo…</>
                 : <><FiFileText size={13} /> Emitir factura</>
               }
             </button>
@@ -226,7 +231,7 @@ function ModalEmitirFactura({ ventasSinFactura, onClose, onGuardado }) {
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
-export default function Facturacion({ user }) {
+export default function Facturacion({ user, darkMode }) {
   const [facturas, setFacturas] = useState([])
   const [ventasSinFactura, setVentasSinFactura] = useState([])
   const [loading, setLoading] = useState(true)
@@ -311,15 +316,15 @@ export default function Facturacion({ user }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1A3A5C' }}>Facturación</div>
-          <div style={{ fontSize: 11, color: '#6A9BB5' }}>Emisión y registro de facturas</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Facturación</div>
+          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Emisión y registro de facturas</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={cargarDatos} style={{ ...BTN_SECONDARY, fontFamily: 'inherit', padding: '8px 12px' }}>
             <FiRefreshCw size={13} />
           </button>
           <button onClick={() => setModalAbierto(true)} style={{ ...BTN_PRIMARY, fontFamily: 'inherit' }}>
-            <FiPlus size={14} /> Emitir factura
+            <FiPlus size={16} /> Emitir factura
           </button>
         </div>
       </div>

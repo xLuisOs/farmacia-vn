@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiX, FiAlertTriangle, FiBox } from 'react-icons/fi';
 import { supabase } from '../packages/supabase';
 
-export default function Inventario() {
+export default function Inventario({ darkMode }) {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);

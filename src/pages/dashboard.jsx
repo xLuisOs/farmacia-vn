@@ -10,7 +10,7 @@ import {
 } from "react-icons/fi";
 import { supabase } from '../packages/supabase'
 
-export default function Dashboard() {
+export default function Dashboard({ darkMode }) {
   const [stats, setStats] = useState({
     ventasDia: 0,
     ingresosDia: 0,
@@ -99,8 +99,8 @@ export default function Dashboard() {
   return (
     <div className="p-8">
       <header className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-500">Resumen operativo de Farmacia Villa Norte</p>
+        <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: darkMode ? '#ffffff' : '#1f2937' }}>Dashboard</h1>
+        <p style={{ color: darkMode ? '#a0aec0' : '#6b7280' }}>Resumen operativo de Farmacia Villa Norte</p>
       </header>
 
       {/* Tarjetas de Resumen */}
