@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../packages/supabase'
+import { invalidarAlertas } from '../utils/alertUtils'
 import {
   FiPlus, FiX, FiTrash2, FiPackage, FiTruck,
   FiCalendar, FiHash, FiDollarSign, FiAlertCircle,
@@ -333,6 +334,7 @@ function ModalNuevaCompra({ proveedores, productos, usuario, onClose, onGuardado
         if (errDetalle) throw errDetalle
       }
 
+      invalidarAlertas()
       onGuardado()
       onClose()
     } catch (err) {

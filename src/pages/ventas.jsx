@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../packages/supabase'
+import { invalidarAlertas } from '../utils/alertUtils'
 import {
   FiPlus, FiX, FiTrash2, FiShoppingCart, FiRefreshCw,
   FiAlertCircle, FiSearch, FiCheck, FiFileText
@@ -267,6 +268,7 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
       }
 
       // Venta OK → pasar a paso de facturación
+      invalidarAlertas()
       setIdVentaCreada(id_venta)
       setTotalVenta(total)
       onGuardado() // recargar historial de fondo

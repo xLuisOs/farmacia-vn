@@ -8,18 +8,22 @@ import Facturacion from './pages/facturacion'
 import Usuarios from './pages/usuarios'
 import Login from './pages/login'
 import ReporteVentas from './pages/reporteVentas'
+import IngresosVsEgresos from './pages/ingresosVsEgresos'
+import Alertas from './pages/alertas'
 import Configuracion from './pages/configuracion'
 import { supabase } from './packages/supabase'
 
 const PAGES = {
-  dashboard:   { component: Dashboard,     roles: ['administrador', 'cajero'] },
-  ventas:      { component: Ventas,        roles: ['administrador', 'cajero'] },
-  inventario:  { component: Inventario,    roles: ['administrador', 'cajero'] },
-  compras:     { component: Compras,       roles: ['administrador'] },
-  facturacion: { component: Facturacion,   roles: ['administrador', 'cajero'] },
-  usuarios:    { component: Usuarios,      roles: ['administrador'] },
-  'r-ventas':  { component: ReporteVentas, roles: ['administrador'] },
-  config:      { component: Configuracion, roles: ['administrador', 'cajero'] },
+  dashboard:   { component: Dashboard,        roles: ['administrador', 'cajero'] },
+  ventas:      { component: Ventas,           roles: ['administrador', 'cajero'] },
+  inventario:  { component: Inventario,       roles: ['administrador', 'cajero'] },
+  compras:     { component: Compras,          roles: ['administrador'] },
+  facturacion: { component: Facturacion,      roles: ['administrador', 'cajero'] },
+  usuarios:    { component: Usuarios,         roles: ['administrador'] },
+  'r-ventas':  { component: ReporteVentas,    roles: ['administrador'] },
+  'r-ingresos': { component: IngresosVsEgresos, roles: ['administrador'] },
+  'r-alertas': { component: Alertas,         roles: ['administrador'] },
+  config:      { component: Configuracion,   roles: ['administrador', 'cajero'] },
 }
 
 function AccesoDenegado({ onVolver, darkMode }) {
@@ -41,6 +45,7 @@ function AccesoDenegado({ onVolver, darkMode }) {
 export default function App() {
   const [user, setUser] = useState(null)
   const [activePage, setActivePage] = useState('dashboard')
+  const [hasNewAlerts, setHasNewAlerts] = useState(false)
   const [darkMode, setDarkMode] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('darkMode')) || false
@@ -73,6 +78,12 @@ export default function App() {
   const handleLogout = () => {
     setUser(null)
     setActivePage('dashboard')
+    localStorage.removeItem('alertasVisadasAt')
+  }
+
+  const marcarAlertasVistas = () => {
+    setHasNewAlerts(false)
+    localStorage.setItem('alertasVisadasAt', new Date().getTime().toString())
   }
 
   if (!user) return <Login onLogin={handleLogin} />
@@ -83,9 +94,9 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: darkMode ? '#0f1419' : '#F0F8FA' }}>
-      <Layout activePage={activePage} setActivePage={setActivePage} onLogout={handleLogout} user={user} darkMode={darkMode} setDarkMode={setDarkMode}>
+      <Layout activePage={activePage} setActivePage={setActivePage} onLogout={handleLogout} user={user} darkMode={darkMode} setDarkMode={setDarkMode} hasNewAlerts={hasNewAlerts} setHasNewAlerts={setHasNewAlerts} marcarAlertasVistas={marcarAlertasVistas}>
         {PageComponent
-          ? <PageComponent setActivePage={setActivePage} user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />
+          ? <PageComponent setActivePage={setActivePage} user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} setHasNewAlerts={setHasNewAlerts} />
           : <AccesoDenegado onVolver={() => setActivePage('dashboard')} darkMode={darkMode} />
         }
       </Layout>

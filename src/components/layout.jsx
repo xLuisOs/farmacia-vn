@@ -13,10 +13,15 @@ const NAV = [
   { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador', 'cajero'] },
 ]
 
-const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios', 'r-ventas', 'config']
+const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios', 'r-ventas', 'r-ingresos', 'r-alertas', 'config']
 
-export default function Layout({ activePage, setActivePage, children, user, onLogout, darkMode, setDarkMode }) {
+export default function Layout({ activePage, setActivePage, children, user, onLogout, darkMode, setDarkMode, hasNewAlerts, setHasNewAlerts, marcarAlertasVistas }) {
   const [clock, setClock] = useState('')
+
+  const handleAlertsClick = () => {
+    setActivePage('r-alertas')
+    marcarAlertasVistas()
+  }
 
   const getInitials = (name) => {
     if (!name) return '??'
@@ -113,6 +118,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
             const isActive = activePage === item.id
             const seccionAnterior = index > 0 ? navFiltrado[index - 1].section : null
             const mostrarSeccion = item.section !== seccionAnterior
+            const mostrarBadge = item.id === 'r-alertas' && hasNewAlerts
 
             return (
               <div key={item.id}>
@@ -122,7 +128,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
                   </div>
                 )}
                 <div
-                  onClick={() => ROUTABLE.includes(item.id) && setActivePage(item.id)}
+                  onClick={() => ROUTABLE.includes(item.id) && (item.id === 'r-alertas' ? handleAlertsClick() : setActivePage(item.id))}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '9px 16px',
@@ -131,10 +137,24 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
                     background: isActive ? (darkMode ? 'rgba(43,197,212,.1)' : 'rgba(43,197,212,.12)') : 'transparent',
                     margin: '1px 0',
                     transition: 'background .15s',
+                    position: 'relative',
                   }}
                 >
-                  <div style={{ width: 30, height: 30, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, background: isActive ? (darkMode ? 'rgba(43,197,212,.15)' : 'rgba(43,197,212,.2)') : (darkMode ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.06)') }}>
+                  <div style={{ width: 30, height: 30, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, background: isActive ? (darkMode ? 'rgba(43,197,212,.15)' : 'rgba(43,197,212,.2)') : (darkMode ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.06)'), position: 'relative' }}>
                     {item.icon}
+                    {mostrarBadge && (
+                      <div style={{
+                        position: 'absolute',
+                        top: -4,
+                        right: -4,
+                        width: 10,
+                        height: 10,
+                        background: '#DC2626',
+                        borderRadius: '50%',
+                        border: '2px solid ' + (darkMode ? '#1a2332' : '#ffffff'),
+                        boxShadow: '0 0 6px rgba(220, 38, 38, 0.8)'
+                      }} />
+                    )}
                   </div>
                   <span style={{ fontSize: 12, fontWeight: isActive ? 600 : 500, color: isActive ? '#7FD4DE' : (darkMode ? '#cbd5e1' : '#a0b3d6') }}>
                     {item.label}

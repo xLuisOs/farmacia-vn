@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiX, FiAlertTriangle, FiBox } from 'react-icons/fi';
 import { supabase } from '../packages/supabase';
+import { invalidarAlertas } from '../utils/alertUtils';
 
 export default function Inventario({ darkMode }) {
   const [productos, setProductos] = useState([]);
@@ -67,6 +68,7 @@ export default function Inventario({ darkMode }) {
 
       if (error) throw error;
       closeModal();
+      invalidarAlertas();
       fetchData();
     } catch (err) {
       alert("Error: " + err.message);
