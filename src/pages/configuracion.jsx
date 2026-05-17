@@ -36,7 +36,6 @@ function Alerta({ tipo, mensaje, darkMode }) {
 }
 
 export default function Configuracion({ user, setUser, darkMode, setDarkMode }) {
-  const [passActual, setPassActual] = useState('')
   const [passNueva, setPassNueva] = useState('')
   const [passConfirm, setPassConfirm] = useState('')
   const [guardandoPass, setGuardandoPass] = useState(false)
@@ -53,46 +52,43 @@ export default function Configuracion({ user, setUser, darkMode, setDarkMode }) 
     inputText: darkMode ? '#ffffff' : '#1A3A5C',
   }
 
-  const cambiarPassword = async () => {
-    setAlertaPass(null)
+// Reemplazá la función cambiarPassword y los campos del formulario
 
-    if (!passActual || !passNueva || !passConfirm) {
-      setAlertaPass({ tipo: 'error', mensaje: 'Completá todos los campos.' })
-      return
-    }
-    if (passActual !== user.password_hash) {
-      setAlertaPass({ tipo: 'error', mensaje: 'La contraseña actual es incorrecta.' })
-      return
-    }
-    if (passNueva.length < 6) {
-      setAlertaPass({ tipo: 'error', mensaje: 'La nueva contraseña debe tener al menos 6 caracteres.' })
-      return
-    }
-    if (passNueva !== passConfirm) {
-      setAlertaPass({ tipo: 'error', mensaje: 'Las contraseñas nuevas no coinciden.' })
-      return
-    }
+const cambiarPassword = async () => {
+  setAlertaPass(null)
 
-    setGuardandoPass(true)
-    try {
-      const { error } = await supabase
-        .from('usuario')
-        .update({ password_hash: passNueva })
-        .eq('id_usuario', user.id_usuario)
-
-      if (error) throw error
-
-      setUser(prev => ({ ...prev, password_hash: passNueva }))
-      setPassActual('')
-      setPassNueva('')
-      setPassConfirm('')
-      setAlertaPass({ tipo: 'exito', mensaje: '¡Contraseña actualizada correctamente!' })
-    } catch (err) {
-      setAlertaPass({ tipo: 'error', mensaje: err.message })
-    } finally {
-      setGuardandoPass(false)
-    }
+  if (!passNueva || !passConfirm) {
+    setAlertaPass({ tipo: 'error', mensaje: 'Completa todos los campos.' })
+    return
   }
+  if (passNueva.length < 6) {
+    setAlertaPass({ tipo: 'error', mensaje: 'La nueva contraseña debe tener al menos 6 caracteres.' })
+    return
+  }
+  if (passNueva !== passConfirm) {
+    setAlertaPass({ tipo: 'error', mensaje: 'Las contraseñas nuevas no coinciden.' })
+    return
+  }
+
+  setGuardandoPass(true)
+  try {
+    const { error } = await supabase
+      .from('usuario')
+      .update({ password_hash: passNueva })
+      .eq('id_usuario', user.id_usuario)
+
+    if (error) throw error
+
+    setUser(prev => ({ ...prev, password_hash: passNueva }))
+    setPassNueva('')
+    setPassConfirm('')
+    setAlertaPass({ tipo: 'exito', mensaje: '¡Contraseña actualizada correctamente!' })
+  } catch (err) {
+    setAlertaPass({ tipo: 'error', mensaje: err.message })
+  } finally {
+    setGuardandoPass(false)
+  }
+}
 
   const handleToggleDarkMode = () => {
     setDarkMode(!darkMode)
@@ -100,12 +96,12 @@ export default function Configuracion({ user, setUser, darkMode, setDarkMode }) 
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 16 }}>
 
       {/* Header */}
       <div>
-        <div style={{ fontSize: 20, fontWeight: 700, color: colors.textPrimary }}>Configuración</div>
-        <div style={{ fontSize: 11, color: colors.textSecondary }}>Preferencias de tu cuenta</div>
+        <div style={{ fontSize: 24, fontWeight: 700, color: colors.textPrimary }}>Configuración</div>
+        <div style={{ fontSize: 14, color: colors.textSecondary }}>Preferencias de tu cuenta</div>
       </div>
 
       {/* Info del usuario */}
@@ -129,10 +125,6 @@ export default function Configuracion({ user, setUser, darkMode, setDarkMode }) 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <FiLock size={15} color={colors.textPrimary} />
             <div style={{ fontSize: 13, fontWeight: 700, color: colors.textPrimary }}>Cambiar contraseña</div>
-          </div>
-          <div>
-            <label style={getLabelStyles(darkMode)}>Contraseña actual</label>
-            <input type="password" value={passActual} onChange={e => setPassActual(e.target.value)} style={getInputStyles(darkMode)} placeholder="Tu contraseña actual" />
           </div>
           <div>
             <label style={getLabelStyles(darkMode)}>Nueva contraseña</label>
@@ -168,9 +160,6 @@ export default function Configuracion({ user, setUser, darkMode, setDarkMode }) 
             >
               <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'white', position: 'absolute', top: 3, transition: 'left .2s', left: darkMode ? 23 : 3, boxShadow: '0 1px 4px rgba(0,0,0,.2)' }} />
             </div>
-          </div>
-          <div style={{ fontSize: 10, color: darkMode ? '#708090' : '#A8CEDD', padding: '8px 12px', background: darkMode ? '#2d3748' : '#F0F8FA', borderRadius: 8 }}>
-            💡 Disfruta del modo oscuro completo en toda la interfaz.
           </div>
         </div>
 

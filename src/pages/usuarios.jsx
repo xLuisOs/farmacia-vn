@@ -1,5 +1,6 @@
 import { supabase } from '../packages/supabase'
 import { useState, useEffect } from 'react'
+import { FiPlus } from 'react-icons/fi'
 
 const BTN = { display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', borderRadius: 8, fontSize: 11, fontWeight: 600, cursor: 'pointer', border: 'none' }
 const INPUT = { padding: '7px 10px', borderRadius: 7, border: '1.5px solid #E2F0F4', fontSize: 11, color: '#1A3A5C', background: 'white', width: '100%', fontFamily: 'inherit' }
@@ -108,19 +109,27 @@ export default function Usuarios({ darkMode }) {
   }
 
   return (
-    <>
+    <div style={{ padding: 16 }}>
       {modal && <Modal user={editUser} onClose={() => { setModal(false); setEditUser(null) }} onSaved={fetchUsuarios} />}
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Usuarios</div>
-          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Gestión de accesos al sistema</div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Usuarios</div>
+          <div style={{ fontSize: 14, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Gestión de accesos al sistema</div>
         </div>
-        <button onClick={() => { setEditUser(null); setModal(true) }} style={{ ...BTN, background: '#1A3A5C', color: 'white', fontFamily: 'inherit' }}>➕ Nuevo usuario</button>
+        <button onClick={() => { setEditUser(null); setModal(true) }} onMouseEnter={e => e.currentTarget.style.background = '#0e7490'} onMouseLeave={e => e.currentTarget.style.background = '#0891B2'}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8, padding: '8px 24px',
+          borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          border: 'none', background: '#0891B2', color: 'white', fontFamily: 'inherit',
+          boxShadow: '0 10px 15px rgba(6,182,212,.2)', transition: 'all .2s'
+          }}>
+            <FiPlus size={16} /> Nuevo Usuario
+        </button>
       </div>
 
       {/* Cards de usuarios */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginTop: 30}}>
         {usuarios.map(u => {
           const initials = u.nombre_completo ? u.nombre_completo.split(' ').slice(0, 2).map(n => n[0]).join('') : '??'
           return (
@@ -129,43 +138,20 @@ export default function Usuarios({ darkMode }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <div style={{ width: 42, height: 42, borderRadius: 12, background: 'linear-gradient(135deg,#5BBFCC,#3A6E9E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: 'white' }}>{initials}</div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}>{u.nombre_completo}</div>
-                    <div style={{ fontSize: 10, color: '#6A9BB5' }}>@{u.nombre_usuario}</div>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: '#1A3A5C' }}>{u.nombre_completo}</div>
+                    <div style={{ fontSize: 14, color: '#6A9BB5' }}>@{u.nombre_usuario}</div>
                   </div>
                 </div>
-                <span style={{ fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 5, background: u.activo ? '#DCFCE7' : '#FEE2E2', color: u.activo ? '#166534' : '#991B1B' }}>{u.activo ? 'Activo' : 'Inactivo'}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, padding: '2px 7px', borderRadius: 5, background: u.activo ? '#DCFCE7' : '#FEE2E2', color: u.activo ? '#166534' : '#991B1B' }}>{u.activo ? 'Activo' : 'Inactivo'}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 9, fontWeight: 600, padding: '3px 9px', borderRadius: 6, background: u.rol === 'administrador' ? '#1A3A5C' : '#DFF4F7', color: u.rol === 'administrador' ? 'white' : '#3A6E9E', textTransform: 'capitalize' }}>{u.rol}</span>
-                <button onClick={() => { setEditUser(u); setModal(true) }} style={{ background: '#EEF1FA', border: 'none', color: '#2A5278', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>✏️ Editar</button>
+                <span style={{ fontSize: 12, fontWeight: 600, padding: '3px 9px', borderRadius: 6, background: u.rol === 'administrador' ? '#1A3A5C' : '#DFF4F7', color: u.rol === 'administrador' ? 'white' : '#3A6E9E', textTransform: 'capitalize' }}>{u.rol}</span>
+                <button onClick={() => { setEditUser(u); setModal(true) }} style={{ background: '#EEF1FA', border: 'none', color: '#2A5278', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}> Editar</button>
               </div>
             </div>
           )
         })}
       </div>
-
-      {/* Roles y permisos */}
-      <div style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', padding: 16 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C', marginBottom: 12 }}>🔐 Roles y permisos</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          {[
-            { rol: 'Administrador', color: '#1A3A5C', permisos: ['Dashboard completo', 'Gestión de inventario', 'Gestión de compras', 'Gestión de usuarios', 'Reportes completos', 'Facturación'] },
-            { rol: 'Cajero',        color: '#3A6E9E', permisos: ['Dashboard básico', 'Registrar ventas', 'Consultar inventario', 'Emitir facturas'] },
-          ].map(r => (
-            <div key={r.rol} style={{ background: '#F0F8FA', borderRadius: 10, padding: 14, border: '1px solid #E2F0F4' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <div style={{ width: 10, height: 10, borderRadius: '50%', background: r.color }} />
-                <span style={{ fontSize: 12, fontWeight: 700, color: '#1A3A5C' }}>{r.rol}</span>
-              </div>
-              {r.permisos.map(p => (
-                <div key={p} style={{ fontSize: 10, color: '#3d5280', padding: '4px 0', borderBottom: '1px solid #E2F0F4', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ color: '#3DBD8A' }}>✓</span> {p}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+    </div>
   )
 }

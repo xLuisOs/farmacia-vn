@@ -7,14 +7,14 @@ import {
 } from 'react-icons/fi'
 
 // ─── Estilos base ─────────────────────────────────────────────────────────────
-const TH = {
-  background: '#F0F8FA', fontSize: 9, fontWeight: 700, color: '#6A9BB5',
+const TH = (darkMode) => ({
+  background: darkMode ? '#2d3f60' : '#F0F8FA', fontSize: 11, fontWeight: 700, color: darkMode ? '#a0aec0' : '#6A9BB5',
   textTransform: 'uppercase', letterSpacing: .8, padding: '8px 16px', textAlign: 'left'
-}
-const TD = {
-  padding: '10px 16px', fontSize: 11, color: '#2d3f60',
-  borderBottom: '1px solid #E2F0F4'
-}
+})
+const TD = (darkMode) => ({
+  padding: '16px 16px', fontSize: 13, color: darkMode ? '#e0e0e0' : '#2d3f60',
+  borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`
+})
 const BTN_PRIMARY = {
   display: 'flex', alignItems: 'center', gap: 8, padding: '10px 24px',
   borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: 'pointer',
@@ -549,107 +549,113 @@ export default function Ventas({ user, darkMode }) {
   )
 
   return (
-    <>
-      {modalAbierto && (
-        <ModalNuevaVenta
-          productos={productos}
-          usuario={user}
-          onClose={() => { setModalAbierto(false); cargarDatos() }}
-          onGuardado={cargarDatos}
-        />
-      )}
+  <div style={{ padding: 16 }}>
+    {modalAbierto && (
+      <ModalNuevaVenta
+        productos={productos}
+        usuario={user}
+        onClose={() => { setModalAbierto(false); cargarDatos() }}
+        onGuardado={cargarDatos}
+      />
+    )}
 
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Ventas</div>
-          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Registro de ventas · descuento FIFO automático</div>
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={cargarDatos} style={{ ...BTN_SECONDARY, fontFamily: 'inherit', padding: '8px 12px' }}>
-            <FiRefreshCw size={13} />
-          </button>
-          <button onClick={() => setModalAbierto(true)} style={{ ...BTN_PRIMARY, fontFamily: 'inherit' }}>
-            <FiPlus size={16} /> Nueva venta
-          </button>
-        </div>
+    {/* Header */}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+      <div>
+        <div style={{ fontSize: 24, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Ventas</div>
+        <div style={{ fontSize: 14, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Registro de ventas · descuento FIFO automático</div>
       </div>
-
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 16 }}>
-        {[
-          { label: 'Ventas hoy',      value: ventasHoy.length,                                                                 icon: '🛒' },
-          { label: 'Ingresos hoy',    value: `Q ${ingresosHoy.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,         icon: '💵' },
-          { label: 'Ticket promedio', value: `Q ${ticketPromedio.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,      icon: '📊' },
-        ].map(s => (
-          <div key={s.label} style={{ background: 'white', borderRadius: 12, padding: 14, border: '1.5px solid #E2F0F4', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{s.icon}</div>
-            <div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: '#1A3A5C' }}>{s.value}</div>
-              <div style={{ fontSize: 10, color: '#6A9BB5' }}>{s.label}</div>
-            </div>
-          </div>
-        ))}
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button onClick={cargarDatos} style={{ ...BTN_SECONDARY, fontFamily: 'inherit', padding: '8px 12px' }}>
+          <FiRefreshCw size={13} />
+        </button>
+        <button onClick={() => setModalAbierto(true)} onMouseEnter={e => e.currentTarget.style.background = '#0e7490'} onMouseLeave={e => e.currentTarget.style.background = '#0891B2'}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8, padding: '8px 24px',
+          borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          border: 'none', background: '#0891B2', color: 'white', fontFamily: 'inherit',
+          boxShadow: '0 10px 15px rgba(6,182,212,.2)', transition: 'all .2s' 
+          }}>
+            <FiPlus size={16} /> Nueva Venta
+        </button>
       </div>
+    </div>
 
-      {/* Historial */}
-      <div style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', overflow: 'hidden' }}>
-        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2F0F4' }}>
+    {/* Stats */}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 16 }}>
+      {[
+        { label: 'Ventas hoy',      value: ventasHoy.length,                                                                icon: '🛒' },
+        { label: 'Ingresos hoy',    value: `Q ${ingresosHoy.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,        icon: '💵' },
+        { label: 'Ticket promedio', value: `Q ${ticketPromedio.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,     icon: '📊' },
+      ].map(s => (
+        <div key={s.label} style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, padding: 14, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: darkMode ? '#2d3f60' : '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{s.icon}</div>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}>📋 Historial de ventas</div>
-            <div style={{ fontSize: 10, color: '#6A9BB5', marginTop: 1 }}>Últimas 50 ventas</div>
-          </div>
-          <div style={{ position: 'relative' }}>
-            <FiSearch size={12} style={{ position: 'absolute', left: 9, top: '50%', transform: 'translateY(-50%)', color: '#A8CEDD' }} />
-            <input
-              type="text"
-              placeholder="Buscar por # o cajero..."
-              value={busquedaHistorial}
-              onChange={e => setBusquedaHistorial(e.target.value)}
-              style={{ ...INPUT, width: 200, paddingLeft: 28, fontSize: 10 }}
-            />
+            <div style={{ fontSize: 18, fontWeight: 800, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{s.value}</div>
+            <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>{s.label}</div>
           </div>
         </div>
+      ))}
+    </div>
 
-        {loading ? (
-          <div style={{ padding: '40px 20px', textAlign: 'center', color: '#A8CEDD', fontSize: 11 }}>Cargando ventas...</div>
-        ) : ventasFiltradas.length === 0 ? (
-          <div style={{ padding: '40px 20px', textAlign: 'center', color: '#A8CEDD' }}>
-            <FiShoppingCart size={28} style={{ marginBottom: 8, opacity: .4, display: 'block', margin: '0 auto 8px' }} />
-            <div style={{ fontSize: 12 }}>{busquedaHistorial ? 'Sin resultados para esa búsqueda' : 'No hay ventas registradas aún'}</div>
-          </div>
-        ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                {['# Venta', 'Fecha', 'Hora', 'Cajero', 'Productos', 'Total', 'Método', 'Estado'].map(h => (
-                  <th key={h} style={TH}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {ventasFiltradas.map(v => {
-                const fecha = toUTC(v.fecha)
-                const optsZona = { timeZone: ZONA }
-                return (
-                  <tr key={v.id_venta}>
-                    <td style={{ ...TD, fontWeight: 700, color: '#3A6E9E' }}>V-{String(v.id_venta).padStart(4, '0')}</td>
-                    <td style={TD}>{fecha.toLocaleDateString('es-GT', { ...optsZona, day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
-                    <td style={TD}>{fecha.toLocaleTimeString('es-GT', { ...optsZona, hour: '2-digit', minute: '2-digit', hour12: true })}</td>
-                    <td style={{ ...TD, fontWeight: 500 }}>{v.usuario?.nombre_completo || '—'}</td>
-                    <td style={{ ...TD, textAlign: 'center' }}>
-                      <span style={{ background: '#DFF4F7', color: '#3A6E9E', padding: '2px 8px', borderRadius: 5, fontSize: 10, fontWeight: 700 }}>{v.detalle_venta?.length || 0}</span>
-                    </td>
-                    <td style={{ ...TD, fontWeight: 700, color: '#1A3A5C' }}>Q {parseFloat(v.total).toLocaleString('es-GT', { minimumFractionDigits: 2 })}</td>
-                    <td style={TD}><MetodoPill metodo={v.metodo_pago} /></td>
-                    <td style={TD}><EstadoPill estado={v.estado} /></td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        )}
+    {/* Historial */}
+    <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden' }}>
+      <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>📋 Historial de ventas</div>
+          <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>Últimas 50 ventas</div>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <FiSearch size={12} style={{ position: 'absolute', left: 9, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#6A9BB5' : '#A8CEDD' }} />
+          <input
+            type="text"
+            placeholder="Buscar por # o cajero..."
+            value={busquedaHistorial}
+            onChange={e => setBusquedaHistorial(e.target.value)}
+            style={{ ...INPUT, width: 200, paddingLeft: 28, fontSize: 10, background: darkMode ? '#2d3f60' : '#ffffff', color: darkMode ? '#ffffff' : '#1A3A5C', borderColor: darkMode ? '#2d3f60' : '#E2F0F4' }}
+          />
+        </div>
       </div>
-    </>
-  )
+
+      {loading ? (
+        <div style={{ padding: '40px 20px', textAlign: 'center', color: darkMode ? '#6A9BB5' : '#A8CEDD', fontSize: 11 }}>Cargando ventas...</div>
+      ) : ventasFiltradas.length === 0 ? (
+        <div style={{ padding: '40px 20px', textAlign: 'center', color: darkMode ? '#6A9BB5' : '#A8CEDD' }}>
+          <FiShoppingCart size={28} style={{ marginBottom: 8, opacity: .4, display: 'block', margin: '0 auto 8px' }} />
+          <div style={{ fontSize: 12 }}>{busquedaHistorial ? 'Sin resultados para esa búsqueda' : 'No hay ventas registradas aún'}</div>
+        </div>
+      ) : (
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              {['# Venta', 'Fecha', 'Hora', 'Cajero', 'Productos', 'Total', 'Método', 'Estado'].map(h => (
+                <th key={h} style={TH(darkMode)}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {ventasFiltradas.map(v => {
+              const fecha = toUTC(v.fecha)
+              const optsZona = { timeZone: ZONA }
+              return (
+                <tr key={v.id_venta}>
+                  <td style={{ ...TD(darkMode), fontWeight: 700, color: darkMode ? '#5BBFCC' : '#3A6E9E' }}>V-{String(v.id_venta).padStart(4, '0')}</td>
+                  <td style={TD(darkMode)}>{fecha.toLocaleDateString('es-GT', { ...optsZona, day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                  <td style={TD(darkMode)}>{fecha.toLocaleTimeString('es-GT', { ...optsZona, hour: '2-digit', minute: '2-digit', hour12: true })}</td>
+                  <td style={{ ...TD(darkMode), fontWeight: 500 }}>{v.usuario?.nombre_completo || '—'}</td>
+                  <td style={{ ...TD(darkMode), textAlign: 'center' }}>
+                    <span style={{ background: darkMode ? '#1a3a5c' : '#DFF4F7', color: darkMode ? '#5BBFCC' : '#3A6E9E', padding: '2px 8px', borderRadius: 5, fontSize: 10, fontWeight: 700 }}>{v.detalle_venta?.length || 0}</span>
+                  </td>
+                  <td style={{ ...TD(darkMode), fontWeight: 700, color: darkMode ? '#5BBFCC' : '#1A3A5C' }}>Q {parseFloat(v.total).toLocaleString('es-GT', { minimumFractionDigits: 2 })}</td>
+                  <td style={TD(darkMode)}><MetodoPill metodo={v.metodo_pago} /></td>
+                  <td style={TD(darkMode)}><EstadoPill estado={v.estado} /></td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      )}
+    </div>
+  </div>
+)
 }

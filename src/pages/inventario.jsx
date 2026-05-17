@@ -93,80 +93,86 @@ export default function Inventario({ darkMode }) {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4" style={{ background: darkMode ? '#1a1f2e' : '#f0f8fa' }}>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Inventario</h1>
-          <p className="text-slate-500 text-sm">Control de existencias y niveles mínimos</p>
+          <h1 className="text-2xl font-bold" style={{ color: darkMode ? '#ffffff' : '#1a3a5c' }}>Inventario</h1>
+          <p className="text-sm" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Control de existencias y niveles mínimos</p>
         </div>
-        <button onClick={() => setIsModalOpen(true)} className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-xl flex items-center shadow-lg transition-all font-bold text-sm">
-          <FiPlus className="mr-2" size={18}/> NUEVO PRODUCTO
+        <button onClick={() => setIsModalOpen(true)} onMouseEnter={e => e.currentTarget.style.background = '#0e7490'} onMouseLeave={e => e.currentTarget.style.background = '#0891B2'}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8, padding: '8px 24px',
+          borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          border: 'none', background: '#0891B2', color: 'white', fontFamily: 'inherit',
+          boxShadow: '0 10px 15px rgba(6,182,212,.2)', transition: 'all .2s'
+          }}>
+            <FiPlus size={18} /> Nuevo Producto
         </button>
       </div>
 
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 mb-6">
+      <div className="p-4 rounded-2xl shadow-sm border mb-6" style={{ background: darkMode ? '#1a2332' : '#ffffff', borderColor: darkMode ? '#2d3f60' : '#e2eff4' }}>
         <div className="relative">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2" size={18} style={{ color: darkMode ? '#6A9BB5' : '#a8aec0' }} />
           <input
             type="text"
             placeholder="Buscar por nombre o categoría..."
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none text-sm text-slate-700 transition-all"
+            className="w-full pl-12 pr-4 py-3 border-none rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none text-sm transition-all"
+            style={{ background: darkMode ? '#2d3f60' : '#f8fcfd', color: darkMode ? '#ffffff' : '#1a3a5c' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="rounded-2xl shadow-sm border overflow-hidden" style={{ background: darkMode ? '#1a2332' : '#ffffff', borderColor: darkMode ? '#2d3f60' : '#e2eff4' }}>
         <table className="w-full text-left">
-          <thead className="bg-slate-50/80 text-[10px] uppercase text-slate-400 font-bold tracking-widest">
+          <thead style={{ background: darkMode ? '#2d3f60' : '#f8fcfd', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#e2eff4'}` }}>
             <tr>
-              <th className="px-6 py-4">Medicamento</th>
-              <th className="px-6 py-4">Categoría</th>
-              <th className="px-6 py-4">Precio</th> {/* nuevo */}
-              <th className="px-6 py-4 text-center">Stock</th>
-              <th className="px-6 py-4">Estado</th>
-              <th className="px-6 py-4 text-center">Acciones</th>
+              <th className="px-6 py-4 text-[10px] uppercase font-bold tracking-widest" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Medicamento</th>
+              <th className="px-6 py-4 text-[10px] uppercase font-bold tracking-widest" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Categoría</th>
+              <th className="px-6 py-4 text-[10px] uppercase font-bold tracking-widest" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Precio</th>
+              <th className="px-6 py-4 text-center text-[10px] uppercase font-bold tracking-widest" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Stock</th>
+              <th className="px-6 py-4 text-[10px] uppercase font-bold tracking-widest" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Estado</th>
+              <th className="px-6 py-4 text-center text-[10px] uppercase font-bold tracking-widest" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody style={{ borderTop: `1px solid ${darkMode ? '#2d3f60' : '#f8fcfd'}` }}>
             {loading ? (
-              <tr><td colSpan="6" className="px-6 py-10 text-center text-slate-400 animate-pulse">Cargando inventario...</td></tr>
+              <tr><td colSpan="6" className="px-6 py-10 text-center animate-pulse" style={{ color: darkMode ? '#6A9BB5' : '#a8aec0' }}>Cargando inventario...</td></tr>
             ) : filteredProducts.length === 0 ? (
-              <tr><td colSpan="6" className="px-6 py-10 text-center text-slate-400">No se encontraron productos.</td></tr>
+              <tr><td colSpan="6" className="px-6 py-10 text-center" style={{ color: darkMode ? '#6A9BB5' : '#a8aec0' }}>No se encontraron productos.</td></tr>
             ) : filteredProducts.map(p => (
-              <tr key={p.id_producto} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-6 py-4 font-semibold text-slate-700">{p.producto}</td>
+              <tr key={p.id_producto} className="transition-colors" style={{ background: 'transparent', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#f0f8fa'}` }}>
+                <td className="px-6 py-4 font-semibold" style={{ color: darkMode ? '#ffffff' : '#1a3a5c' }}>{p.producto}</td>
                 <td className="px-6 py-4">
-                  <span className="text-[10px] bg-cyan-50 text-cyan-700 px-2 py-1 rounded-md font-bold uppercase">
+                  <span className="text-[10px] px-2 py-1 rounded-md font-bold uppercase" style={{ background: darkMode ? '#1a3a5c' : '#ecf8fb', color: darkMode ? '#5BBFCC' : '#0891b2' }}>
                     {p.categoria}
                   </span>
                 </td>
-                {/* nuevo */}
-                <td className="px-6 py-4 font-semibold text-slate-700">
+                <td className="px-6 py-4 font-semibold" style={{ color: darkMode ? '#ffffff' : '#1a3a5c' }}>
                   Q {parseFloat(p.precio_venta).toFixed(2)}
                 </td>
                 <td className="px-6 py-4">
-                  <div className={`flex items-center justify-center gap-2 font-bold ${p.alerta_stock_bajo ? 'text-red-500' : 'text-slate-600'}`}>
+                  <div className={`flex items-center justify-center gap-2 font-bold`} style={{ color: p.alerta_stock_bajo ? '#ef4444' : (darkMode ? '#e0e0e0' : '#475569') }}>
                     <FiBox size={16}/>
                     {p.stock_actual}
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   {p.alerta_stock_bajo ? (
-                    <span className="flex items-center gap-1 text-red-600 text-[10px] font-black bg-red-50 border border-red-100 px-2 py-1 rounded-full w-fit">
+                    <span className="flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full w-fit" style={{ background: '#fef2f2', color: '#991B1B', border: '1px solid #fecaca' }}>
                       <FiAlertTriangle size={12}/> REABASTECER
                     </span>
                   ) : (
-                    <span className="text-emerald-600 text-[10px] font-bold bg-emerald-50 px-2 py-1 rounded-full w-fit">
+                    <span className="text-[10px] font-bold px-2 py-1 rounded-full w-fit" style={{ background: '#dcfce7', color: '#166534' }}>
                       STOCK OK
                     </span>
                   )}
                 </td>
                 <td className="px-6 py-4 text-center">
                   <div className="flex justify-center gap-2">
-                    <button onClick={() => openEdit(p)} className="p-2 hover:bg-cyan-50 text-cyan-600 rounded-lg transition-all"><FiEdit2 size={16}/></button>
-                    <button className="p-2 hover:bg-red-50 text-red-400 rounded-lg transition-all"><FiTrash2 size={16}/></button>
+                    <button onClick={() => openEdit(p)} className="p-2 rounded-lg transition-all" style={{ color: '#0891b2', background: darkMode ? 'transparent' : 'transparent', hover: darkMode ? '#2d3f60' : '#ecf8fb' }}><FiEdit2 size={16}/></button>
+                    <button className="p-2 rounded-lg transition-all" style={{ color: '#ef4444', background: darkMode ? 'transparent' : 'transparent' }}><FiTrash2 size={16}/></button>
                   </div>
                 </td>
               </tr>
@@ -177,31 +183,31 @@ export default function Inventario({ darkMode }) {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
-              <h2 className="text-xl font-bold text-slate-800">{editingId ? 'Editar Info' : 'Registrar'} Producto</h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors"><FiX size={24}/></button>
+          <div className="rounded-3xl shadow-2xl w-full max-w-md overflow-hidden" style={{ background: darkMode ? '#1a2332' : '#ffffff' }}>
+            <div className="p-6 border-b flex justify-between items-center" style={{ background: darkMode ? '#2d3f60' : '#f8fcfd', borderColor: darkMode ? '#2d3f60' : '#f0f0f0' }}>
+              <h2 className="text-xl font-bold" style={{ color: darkMode ? '#ffffff' : '#1a3a5c' }}>{editingId ? 'Editar Info' : 'Registrar'} Producto</h2>
+              <button onClick={closeModal} className="transition-colors" style={{ color: darkMode ? '#a0aec0' : '#a8aec0' }}><FiX size={24}/></button>
             </div>
             <form onSubmit={handleSave} className="p-6 space-y-4">
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-tighter ml-1">Nombre del Medicamento</label>
-                <input type="text" className="w-full mt-1 p-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none" value={formProducto.nombre} onChange={e => setFormProducto({...formProducto, nombre: e.target.value})} required />
+                <label className="text-[10px] font-black uppercase tracking-tighter ml-1 block" style={{ color: darkMode ? '#a0aec0' : '#a8aec0' }}>Nombre del Medicamento</label>
+                <input type="text" className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none" style={{ background: darkMode ? '#2d3f60' : '#f8fcfd', borderColor: darkMode ? '#2d3f60' : '#e2eff4', color: darkMode ? '#ffffff' : '#1a3a5c' }} value={formProducto.nombre} onChange={e => setFormProducto({...formProducto, nombre: e.target.value})} required />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-tighter ml-1">Precio de Venta (Q)</label>
-                  <input type="number" step="0.01" min="0" className="w-full mt-1 p-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none" value={formProducto.precio_venta} onChange={e => setFormProducto({...formProducto, precio_venta: e.target.value})} required />
+                  <label className="text-[10px] font-black uppercase tracking-tighter ml-1 block" style={{ color: darkMode ? '#a0aec0' : '#a8aec0' }}>Precio de Venta (Q)</label>
+                  <input type="number" step="0.01" min="0" className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none" style={{ background: darkMode ? '#2d3f60' : '#f8fcfd', borderColor: darkMode ? '#2d3f60' : '#e2eff4', color: darkMode ? '#ffffff' : '#1a3a5c' }} value={formProducto.precio_venta} onChange={e => setFormProducto({...formProducto, precio_venta: e.target.value})} required />
                 </div>
                 <div>
-                  <label className="text-[10px] font-black text-red-400 uppercase tracking-tighter ml-1">Mínimo para Alerta</label>
-                  <input type="number" className="w-full mt-1 p-3 bg-red-50/30 border border-red-100 rounded-xl focus:ring-2 focus:ring-red-500 outline-none font-bold text-red-600" value={formProducto.stock_minimo} onChange={e => setFormProducto({...formProducto, stock_minimo: e.target.value})} required />
+                  <label className="text-[10px] font-black text-red-400 uppercase tracking-tighter ml-1 block">Mínimo para Alerta</label>
+                  <input type="number" className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none font-bold" style={{ background: '#fef2f2', borderColor: '#fecaca', color: '#991B1B' }} value={formProducto.stock_minimo} onChange={e => setFormProducto({...formProducto, stock_minimo: e.target.value})} required />
                 </div>
               </div>
 
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-tighter ml-1">Categoría</label>
-                <select className="w-full mt-1 p-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none" value={formProducto.id_categoria} onChange={e => setFormProducto({...formProducto, id_categoria: e.target.value})} required>
+                <label className="text-[10px] font-black uppercase tracking-tighter ml-1 block" style={{ color: darkMode ? '#a0aec0' : '#a8aec0' }}>Categoría</label>
+                <select className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none" style={{ background: darkMode ? '#2d3f60' : '#f8fcfd', borderColor: darkMode ? '#2d3f60' : '#e2eff4', color: darkMode ? '#ffffff' : '#1a3a5c' }} value={formProducto.id_categoria} onChange={e => setFormProducto({...formProducto, id_categoria: e.target.value})} required>
                   <option value="">Seleccionar...</option>
                   {categorias.map(c => <option key={c.id_categoria} value={c.id_categoria}>{c.nombre}</option>)}
                 </select>

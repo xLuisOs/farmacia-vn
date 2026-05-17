@@ -6,9 +6,9 @@ const NAV = [
   { id: 'inventario',  icon: '📦', label: 'Inventario',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
   { id: 'compras',     icon: '🏪', label: 'Compras',             section: 'Menú principal', roles: ['administrador'] },
   { id: 'facturacion', icon: '🧾', label: 'Facturación',         section: 'Menú principal', roles: ['administrador', 'cajero'] },
-  { id: 'r-ventas',    icon: '📈', label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador'] },
+  { id: 'r-ventas',    icon: '📈', label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador', 'cajero'] },
   { id: 'r-ingresos',  icon: '💰', label: 'Ingresos vs Egresos', section: 'Reportes',       roles: ['administrador'] },
-  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: 'Reportes',       roles: ['administrador'] },
+  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: 'Reportes',       roles: ['administrador', 'cajero'] },
   { id: 'usuarios',    icon: '👥', label: 'Usuarios',            section: 'Admin',          roles: ['administrador'] },
   { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador', 'cajero'] },
 ]
@@ -61,7 +61,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
       {/* ── TITLEBAR ── */}
       <div style={{
         background: darkMode ? colors.titlebarDarkBg : colors.titlebarBg,
-        height: 44,
+        height: 50,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -70,19 +70,17 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
         flexShrink: 0,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #5BBFCC, #1a7fc1)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 13, color: 'white', fontWeight: 700,
-          }}>⚕</div>
+          <img src="/src/assets/logo_farmaciavn.jpeg" alt="Logo Farmacia Villa Norte" style={{
+            width: 32,
+            height: 32,
+            borderRadius: 50,
+            objectFit: 'cover',}} />
           <div>
-            <div style={{ color: 'white', fontSize: 13, fontWeight: 600 }}>Sistema de Gestión – Farmacia Villa Norte</div>
-            <div style={{ color: '#7FD4DE', fontSize: 10 }}>Dashboard principal</div>
+            <div style={{ color: 'white', fontSize: 16, fontWeight: 600 }}>Sistema de Gestión – Farmacia Villa Norte</div>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ color: '#8fa3c8', fontSize: 10 }}>🕐 {clock}</span>
+          <span style={{ color: '#8fa3c8', fontSize: 12 }}> {clock}</span>
           <div
             onClick={onLogout}
             title="Cerrar Sesión"
@@ -92,7 +90,7 @@ export default function Layout({ activePage, setActivePage, children, user, onLo
               {getInitials(user?.nombre_completo)}
             </div>
             <div>
-              <div style={{ color: '#cdd8ee', fontSize: 10 }}>{user?.nombre_completo || 'Usuario'}</div>
+              <div style={{ color: '#cdd8ee', fontSize: 12 }}>{user?.nombre_completo || 'Usuario'}</div>
               <div style={{ color: '#5BBFCC', fontSize: 9, fontWeight: 600 }}>{user?.rol?.toUpperCase() || 'ROL'}</div>
             </div>
           </div>

@@ -110,7 +110,7 @@ export default function IngresosVsEgresos({ darkMode }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen" style={{ background: darkMode ? '#0f1419' : '#F0F8FA' }}>
+      <div className="flex items-center justify-center min-h-screen" style={{ background: darkMode ? '#1a1f2e' : '#F0F8FA' }}>
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderTopColor: '#1A3A5C', borderBottomColor: '#5BBFCC' }}></div>
       </div>
     )
@@ -122,7 +122,7 @@ export default function IngresosVsEgresos({ darkMode }) {
   ]
 
   return (
-    <div className="min-h-screen p-6" style={{ background: darkMode ? '#0f1419' : '#F0F8FA' }}>
+    <div className="min-h-screen p-6" style={{ background: darkMode ? '#1a1f2e' : '#F0F8FA' }}>
       <div className="max-w-7xl mx-auto">
         {/* Encabezado */}
         <div className="flex items-center justify-between mb-8">

@@ -8,23 +8,24 @@ import {
 } from 'react-icons/fi'
 
 // ─── Estilos base reutilizables ───────────────────────────────────────────────
-const TH = {
-  background: '#F0F8FA', fontSize: 9, fontWeight: 700, color: '#6A9BB5',
+
+const TH = (darkMode) => ({
+  background: darkMode ? '#2d3f60' : '#F0F8FA', fontSize: 11, fontWeight: 700, color: darkMode ? '#a0aec0' : '#6A9BB5',
   textTransform: 'uppercase', letterSpacing: .8, padding: '8px 16px', textAlign: 'left'
-}
-const TD = {
-  padding: '10px 16px', fontSize: 11, color: '#2d3f60',
-  borderBottom: '1px solid #E2F0F4'
-}
+})
+const TD = (darkMode) => ({
+  padding: '16px 16px', fontSize: 13, color: darkMode ? '#e0e0e0' : '#2d3f60',
+  borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`
+})
 const BTN_PRIMARY = {
-  display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px',
-  borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer',
-  border: 'none', background: '#1A3A5C', color: 'white', fontFamily: 'inherit'
+  display: 'flex', alignItems: 'center', gap: 8, padding: '8px 24px',
+  borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+  border: 'none', background: '#0891B2', color: 'white', fontFamily: 'inherit'
 }
 const BTN_SECONDARY = {
-  ...BTN_PRIMARY,
-  background: 'white', color: '#1A3A5C',
-  border: '1.5px solid #E2F0F4'
+  display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px',
+  borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+  border: '1.5px solid #E2F0F4', background: 'white', color: '#1A3A5C', fontFamily: 'inherit'
 }
 const INPUT = {
   padding: '8px 10px', borderRadius: 7, border: '1.5px solid #E2F0F4',
@@ -158,7 +159,7 @@ function ModalNuevoProveedor({ onClose, onGuardado }) {
           padding: '18px 22px', borderRadius: '18px 18px 0 0',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center'
         }}>
-          <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>🤝 Nuevo Proveedor</div>
+          <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}> Nuevo Proveedor</div>
           <button onClick={onClose} style={{ background: 'rgba(255,255,255,.15)', border: 'none', color: 'white', width: 30, height: 30, borderRadius: '50%', cursor: 'pointer', fontSize: 16, fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FiX />
           </button>
@@ -538,6 +539,7 @@ export default function Compras({ user, darkMode }) {
   const [loading, setLoading] = useState(true)
   const [modalAbierto, setModalAbierto] = useState(false)
   const [modalProveedorAbierto, setModalProveedorAbierto] = useState(false)
+  const [hoverBtn, setHoverBtn] = useState(false)
 
   const cargarDatos = useCallback(async () => {
     setLoading(true)
@@ -585,7 +587,7 @@ export default function Compras({ user, darkMode }) {
     .reduce((s, c) => s + parseFloat(c.total || 0), 0)
 
   return (
-    <>
+    <div style={{ padding: 16 }}> 
       {modalProveedorAbierto && (
         <ModalNuevoProveedor
           onClose={() => setModalProveedorAbierto(false)}
@@ -605,16 +607,18 @@ export default function Compras({ user, darkMode }) {
       {/* ─── Header de página ─────────────────────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Compras</div>
-          <div style={{ fontSize: 11, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>
-            Registro de órdenes de compra y generación de lotes
-          </div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Compras</div>
+    <div style={{ fontSize: 14, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>Registro de órdenes de compra y generación de lotes</div>
         </div>
-        <button
-          onClick={() => setModalAbierto(true)}
-          style={{ ...BTN_PRIMARY, fontFamily: 'inherit', padding: '9px 18px' }}
-        >
-          <FiPlus size={14} /> Nueva compra
+        <button onMouseEnter={() => setHoverBtn(true)} onMouseLeave={() => setHoverBtn(false)} onClick={() => setModalAbierto(true)}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8, padding: '8px 24px',
+          borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          border: 'none', background: hoverBtn ? '#0e7490' : '#0891B2',
+          color: 'white', fontFamily: 'inherit',
+          boxShadow: '0 10px 15px rgba(6,182,212,.2)', transition: 'all .2s'
+        }}>
+          <FiPlus size={16} /> Nueva Compra
         </button>
       </div>
 
@@ -628,43 +632,43 @@ export default function Compras({ user, darkMode }) {
           { label: 'Gasto del mes', value: `Q ${totalMes.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`, icon: '💵' },
           { label: 'Proveedores activos', value: proveedores.filter(p => p.activo).length, icon: '🤝' },
         ].map(s => (
-          <div key={s.label} style={{ background: 'white', borderRadius: 12, padding: 14, border: '1.5px solid #E2F0F4', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{s.icon}</div>
+          <div key={s.label} style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, padding: 14, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: darkMode ? '#2d3f60' : '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{s.icon}</div>
             <div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: '#1A3A5C' }}>{s.value}</div>
-              <div style={{ fontSize: 10, color: '#6A9BB5' }}>{s.label}</div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{s.value}</div>
+              <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>{s.label}</div>
             </div>
           </div>
         ))}
       </div>
 
       {/* ─── Proveedores ──────────────────────────────────────────────────── */}
-      <div style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', overflow: 'hidden', marginBottom: 16 }}>
-        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2F0F4' }}>
+      <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden', marginBottom: 16 }}>
+        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}> Proveedores</div>
-            <span style={{ background: '#1A3A5C', color: 'white', fontSize: 9, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}> Proveedores</div>
+            <span style={{ background: darkMode ? '#2d3f60' : '#1A3A5C', color: darkMode ? '#a0aec0' : 'white', fontSize: 9, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
               {proveedores.length}
             </span>
           </div>
           <button
             onClick={() => setModalProveedorAbierto(true)}
-            style={{ ...BTN_SECONDARY, padding: '5px 12px', fontSize: 10, fontFamily: 'inherit' }}
+            style={{ ...BTN_SECONDARY, padding: '5px 12px', fontSize: 10, fontFamily: 'inherit', background: darkMode ? '#2d3f60' : 'white', color: darkMode ? '#a0aec0' : '#1A3A5C', borderColor: darkMode ? '#2d3f60' : '#E2F0F4' }}
           >
             <FiUserPlus size={12} /> Nuevo proveedor
           </button>
         </div>
         {proveedores.length === 0 ? (
-          <div style={{ padding: '30px 20px', textAlign: 'center', color: '#A8CEDD', fontSize: 11 }}>
+          <div style={{ padding: '30px 20px', textAlign: 'center', color: darkMode ? '#6A9BB5' : '#A8CEDD', fontSize: 11 }}>
             <FiTruck size={24} style={{ marginBottom: 8, opacity: .4 }} />
             <div>No hay proveedores registrados</div>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
             {proveedores.map(p => (
-              <div key={p.id_proveedor} style={{ padding: '14px 16px', borderRight: '1px solid #E2F0F4', borderBottom: '1px solid #E2F0F4' }}>
+              <div key={p.id_proveedor} style={{ padding: '14px 16px', borderRight: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#1A3A5C' }}>{p.nombre}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{p.nombre}</div>
                   <span style={{
                     fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 5,
                     background: p.activo ? '#DCFCE7' : '#FEE2E2',
@@ -673,9 +677,9 @@ export default function Compras({ user, darkMode }) {
                     {p.activo ? 'Activo' : 'Inactivo'}
                   </span>
                 </div>
-                {p.contacto && <div style={{ fontSize: 10, color: '#6A9BB5' }}> {p.contacto}</div>}
-                {p.telefono && <div style={{ fontSize: 10, color: '#6A9BB5' }}>📞 {p.telefono}</div>}
-                {p.email && <div style={{ fontSize: 10, color: '#6A9BB5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}> {p.email}</div>}
+                {p.contacto && <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5' }}> {p.contacto}</div>}
+                {p.telefono && <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>📞 {p.telefono}</div>}
+                {p.email && <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}> {p.email}</div>}
               </div>
             ))}
           </div>
@@ -683,29 +687,29 @@ export default function Compras({ user, darkMode }) {
       </div>
 
       {/* ─── Historial de compras ──────────────────────────────────────────── */}
-      <div style={{ background: 'white', borderRadius: 12, border: '1.5px solid #E2F0F4', overflow: 'hidden' }}>
-        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2F0F4' }}>
+      <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden' }}>
+        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#1A3A5C' }}>📋 Historial de compras</div>
-            <div style={{ fontSize: 10, color: '#6A9BB5', marginTop: 1 }}>Últimas 50 órdenes</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>📋 Historial de compras</div>
+            <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>Últimas 50 órdenes</div>
           </div>
           <button
             onClick={cargarDatos}
-            style={{ ...BTN_SECONDARY, padding: '5px 10px', fontSize: 10, fontFamily: 'inherit' }}
+            style={{ ...BTN_SECONDARY, padding: '5px 10px', fontSize: 10, fontFamily: 'inherit', background: darkMode ? '#2d3f60' : 'white', color: darkMode ? '#a0aec0' : '#1A3A5C', borderColor: darkMode ? '#2d3f60' : '#E2F0F4' }}
           >
             <FiRefreshCw size={11} /> Actualizar
           </button>
         </div>
 
         {loading ? (
-          <div style={{ padding: '40px 20px', textAlign: 'center', color: '#A8CEDD', fontSize: 11 }}>
+          <div style={{ padding: '40px 20px', textAlign: 'center', color: darkMode ? '#6A9BB5' : '#A8CEDD', fontSize: 11 }}>
             Cargando compras...
           </div>
         ) : compras.length === 0 ? (
-          <div style={{ padding: '40px 20px', textAlign: 'center', color: '#A8CEDD' }}>
+          <div style={{ padding: '40px 20px', textAlign: 'center', color: darkMode ? '#6A9BB5' : '#A8CEDD' }}>
             <FiPackage size={28} style={{ marginBottom: 8, opacity: .4 }} />
             <div style={{ fontSize: 12 }}>No hay compras registradas aún</div>
-            <div style={{ fontSize: 10, marginTop: 4, color: '#C5D9E3' }}>
+            <div style={{ fontSize: 10, marginTop: 4, color: darkMode ? '#6A9BB5' : '#C5D9E3' }}>
               Usa el botón "Nueva compra" para registrar la primera entrada de mercancía
             </div>
           </div>
@@ -714,39 +718,39 @@ export default function Compras({ user, darkMode }) {
             <thead>
               <tr>
                 {['# Compra', 'Fecha', 'Proveedor', 'Productos', 'Total', 'Registrado por', 'Observaciones'].map(h => (
-                  <th key={h} style={TH}>{h}</th>
+                  <th key={h} style={TH(darkMode)}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {compras.map(c => (
-                <tr key={c.id_compra} style={{ ':hover': { background: '#F8FCFD' } }}>
-                  <td style={{ ...TD, fontWeight: 700, color: '#3A6E9E' }}>
+                <tr key={c.id_compra} style={{ ':hover': { background: darkMode ? '#2d3f60' : '#F8FCFD' } }}>
+                  <td style={{ ...TD(darkMode), fontWeight: 700, color: darkMode ? '#5BBFCC' : '#3A6E9E' }}>
                     C-{String(c.id_compra).padStart(4, '0')}
                   </td>
-                  <td style={TD}>
+                  <td style={TD(darkMode)}>
                     {new Date(c.fecha).toLocaleDateString('es-GT', {
                       day: '2-digit', month: '2-digit', year: 'numeric'
                     })}
                   </td>
-                  <td style={{ ...TD, fontWeight: 500 }}>
+                  <td style={{ ...TD(darkMode), fontWeight: 500 }}>
                     {c.proveedor?.nombre || '—'}
                   </td>
-                  <td style={{ ...TD, textAlign: 'center' }}>
+                  <td style={{ ...TD(darkMode), textAlign: 'center' }}>
                     <span style={{
-                      background: '#DFF4F7', color: '#3A6E9E',
+                      background: darkMode ? '#1a3a5c' : '#DFF4F7', color: darkMode ? '#5BBFCC' : '#3A6E9E',
                       padding: '2px 8px', borderRadius: 5, fontSize: 10, fontWeight: 700
                     }}>
                       {c.detalle_compra?.length || 0}
                     </span>
                   </td>
-                  <td style={{ ...TD, fontWeight: 700, color: '#1A3A5C' }}>
+                  <td style={{ ...TD(darkMode), fontWeight: 700, color: darkMode ? '#5BBFCC' : '#1A3A5C' }}>
                     Q {parseFloat(c.total).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                   </td>
-                  <td style={TD}>
+                  <td style={TD(darkMode)}>
                     {c.usuario?.nombre_completo || '—'}
                   </td>
-                  <td style={{ ...TD, color: '#6A9BB5', maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <td style={{ ...TD(darkMode), color: darkMode ? '#a0aec0' : '#6A9BB5', maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {c.observaciones || '—'}
                   </td>
                 </tr>
@@ -755,6 +759,6 @@ export default function Compras({ user, darkMode }) {
           </table>
         )}
       </div>
-    </>
+    </div>
   )
 }

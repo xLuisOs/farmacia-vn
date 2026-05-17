@@ -206,7 +206,7 @@ export default function Alertas({ darkMode, setHasNewAlerts }) {
   }
 
   return (
-    <div className="min-h-screen p-6" style={{ background: darkMode ? '#0f1419' : '#F0F8FA' }}>
+    <div className="min-h-screen p-6" style={{ background: darkMode ? '#1a1f2e' : '#F0F8FA' }}>
       <div className="max-w-6xl mx-auto">
         {/* Encabezado */}
         <div className="flex items-center justify-between mb-8">
