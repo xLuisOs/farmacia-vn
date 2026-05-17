@@ -3,9 +3,10 @@ import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, 
   Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell 
 } from 'recharts'
+import * as XLSX from 'xlsx'
 import { 
   FiTrendingUp, FiTrendingDown, FiDollarSign, 
-  FiCalendar, FiFilter, FiRefreshCw 
+  FiCalendar, FiFilter, FiRefreshCw, FiDownload
 } from 'react-icons/fi'
 import { supabase } from '../packages/supabase'
 
@@ -121,6 +122,49 @@ export default function IngresosVsEgresos({ darkMode }) {
     { name: 'Egresos', value: resumen.egresosTotales, color: '#EF4444' }
   ]
 
+  const exportarExcel = () => {
+    const periodos = {
+      semana: 'Última Semana',
+      mes: 'Último Mes',
+      año: 'Último Año'
+    }
+    const periodoTexto = periodos[tiempoFiltro]
+    
+    const wb = XLSX.utils.book_new()
+    
+    // Hoja 1: Resumen
+    const datosResumen = [
+      ['REPORTE DE INGRESOS VS EGRESOS'],
+      [],
+      ['Periodo:', periodoTexto],
+      [],
+      ['RESUMEN GENERAL'],
+      ['Concepto', 'Monto (Q)'],
+      ['Ingresos Totales', resumen.ingresosTotales.toLocaleString('es-GT', { minimumFractionDigits: 2 })],
+      ['Egresos Totales', resumen.egresosTotales.toLocaleString('es-GT', { minimumFractionDigits: 2 })],
+      ['Neto', resumen.neto.toLocaleString('es-GT', { minimumFractionDigits: 2 })],
+      ['Margen de Ganancia (%)', resumen.margenGanancia + '%'],
+      [],
+      ['DATOS POR FECHA'],
+      ['Fecha', 'Ingresos (Q)', 'Egresos (Q)', 'Neto (Q)'],
+      ...(datos || []).map(d => {
+        const fechaObj = new Date(d.fecha + 'T00:00:00Z')
+        const fechaFormato = fechaObj.toLocaleDateString('es-GT', { timeZone: 'UTC', day: '2-digit', month: '2-digit', year: 'numeric' })
+        return [
+          fechaFormato,
+          d.ingresos.toLocaleString('es-GT', { minimumFractionDigits: 2 }),
+          d.egresos.toLocaleString('es-GT', { minimumFractionDigits: 2 }),
+          (d.ingresos - d.egresos).toLocaleString('es-GT', { minimumFractionDigits: 2 })
+        ]
+      })
+    ]
+    const ws1 = XLSX.utils.aoa_to_sheet(datosResumen)
+    ws1['!cols'] = [{ wch: 25 }, { wch: 20 }, { wch: 20 }, { wch: 20 }]
+    XLSX.utils.book_append_sheet(wb, ws1, 'Resumen')
+    
+    XLSX.writeFile(wb, `Ingresos_Egresos_${tiempoFiltro}.xlsx`)
+  }
+
   return (
     <div className="min-h-screen p-6" style={{ background: darkMode ? '#1a1f2e' : '#F0F8FA' }}>
       <div className="max-w-7xl mx-auto">
@@ -143,6 +187,17 @@ export default function IngresosVsEgresos({ darkMode }) {
           >
             <FiRefreshCw size={18} />
             Actualizar
+          </button>
+          <button
+            onClick={exportarExcel}
+            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition font-medium"
+            style={{ background: '#5BBFCC' }}
+            onMouseEnter={(e) => e.target.style.background = '#4da9b8'}
+            onMouseLeave={(e) => e.target.style.background = '#5BBFCC'}
+            title="Exportar a Excel"
+          >
+            <FiDownload size={18} />
+            Exportar
           </button>
         </div>
 

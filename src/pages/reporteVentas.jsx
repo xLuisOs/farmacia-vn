@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../packages/supabase'
+import * as XLSX from 'xlsx'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 import {
   FiCalendar, FiShoppingCart, FiTrendingUp, FiCreditCard,
   FiChevronDown, FiChevronUp, FiRefreshCw, FiPackage,
-  FiAlertCircle
+  FiAlertCircle, FiDownload
 } from 'react-icons/fi'
 
 const ZONA = 'America/Guatemala'
@@ -205,6 +206,58 @@ export default function ReporteVentas({ darkMode }) {
   const fechaBonita = new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString('es-GT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   const esHoy = fechaSeleccionada === hoyStr
 
+  const exportarExcel = () => {
+    const wb = XLSX.utils.book_new()
+    
+    // Hoja 1: Resumen del día
+    const datosResumen = [
+      ['REPORTE DE VENTAS DIARIAS'],
+      [],
+      ['Fecha:', fechaBonita],
+      [],
+      ['ESTADISTICAS'],
+      ['Concepto', 'Valor'],
+      ['Total de Ventas', ventas.length],
+      ['Ingresos Totales', `Q ${totalIngresos.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`],
+      ['Ticket Promedio', `Q ${ticketPromedio.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`],
+      ['Total de Productos Vendidos', totalProductos],
+      ['Metodo de Pago Principal', metodoPrincipal.charAt(0).toUpperCase() + metodoPrincipal.slice(1)],
+      [],
+      ['INGRESOS POR HORA'],
+      ['Hora', 'Ingresos (Q)', 'Cantidad de Ventas'],
+      ...datosPorHora.map(d => [
+        `${d.hora}:00`,
+        d.ingresos.toLocaleString('es-GT', { minimumFractionDigits: 2 }),
+        d.cantidad
+      ])
+    ]
+    const ws1 = XLSX.utils.aoa_to_sheet(datosResumen)
+    ws1['!cols'] = [{ wch: 30 }, { wch: 25 }, { wch: 20 }]
+    XLSX.utils.book_append_sheet(wb, ws1, 'Resumen')
+    
+    // Hoja 2: Detalles de ventas
+    const datosVentas = [
+      ['DETALLE DE VENTAS DIARIAS'],
+      [],
+      ['Fecha:', fechaBonita],
+      [],
+      ['ID Venta', 'Hora', 'Usuario', 'Metodo de Pago', 'Total (Q)', 'Cantidad de Productos'],
+      ...ventas.map(v => [
+        `V-${String(v.id_venta).padStart(4, '0')}`,
+        toUTC(v.fecha).toLocaleTimeString('es-GT', { timeZone: ZONA, hour: '2-digit', minute: '2-digit', hour12: true }),
+        v.usuario?.nombre_completo || '-',
+        v.metodo_pago.charAt(0).toUpperCase() + v.metodo_pago.slice(1),
+        v.total.toLocaleString('es-GT', { minimumFractionDigits: 2 }),
+        v.detalle_venta?.length || 0
+      ])
+    ]
+    const ws2 = XLSX.utils.aoa_to_sheet(datosVentas)
+    ws2['!cols'] = [{ wch: 12 }, { wch: 12 }, { wch: 20 }, { wch: 18 }, { wch: 15 }, { wch: 20 }]
+    XLSX.utils.book_append_sheet(wb, ws2, 'Ventas')
+    
+    XLSX.writeFile(wb, `Ventas_${fechaSeleccionada}.xlsx`)
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
@@ -230,6 +283,13 @@ export default function ReporteVentas({ darkMode }) {
             style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer', border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, background: darkMode ? '#1a2332' : 'white', color: darkMode ? '#a0aec0' : '#1A3A5C', fontFamily: 'inherit' }}
           >
             <FiRefreshCw size={13} style={loading ? { animation: 'spin 1s linear infinite' } : {}} />
+          </button>
+          <button
+            onClick={exportarExcel}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: 'pointer', border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, background: darkMode ? '#1a2332' : 'white', color: darkMode ? '#a0aec0' : '#1A3A5C', fontFamily: 'inherit' }}
+            title="Exportar a Excel"
+          >
+            <FiDownload size={13} />
           </button>
         </div>
       </div>

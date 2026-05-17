@@ -10,7 +10,7 @@ const NAV = [
   { id: 'inventario',  icon: <FiBox size={18} style={{ color: 'white' }} />, label: 'Inventario',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
   { id: 'compras',     icon: <FiTruck size={18} style={{ color: 'white' }} />, label: 'Compras',             section: 'Menú principal', roles: ['administrador'] },
   { id: 'facturacion', icon: <FiFileText size={18} style={{ color: 'white' }} />, label: 'Facturación',         section: 'Menú principal', roles: ['administrador', 'cajero'] },
-  { id: 'r-ventas',    icon: <FiTrendingUp size={18} style={{ color: 'white' }} />, label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador', 'cajero'] },
+  { id: 'r-ventas',    icon: <FiTrendingUp size={18} style={{ color: 'white' }} />, label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador'] },
   { id: 'r-ingresos',  icon: <FiDollarSign size={18} style={{ color: 'white' }} />, label: 'Ingresos vs Egresos', section: 'Reportes',       roles: ['administrador'] },
   { id: 'r-alertas',   icon: <FiAlertTriangle size={18} style={{ color: 'white' }} />, label: 'Alertas',             section: 'Reportes',       roles: ['administrador', 'cajero'] },
   { id: 'usuarios',    icon: <FiUsers size={18} style={{ color: 'white' }} />, label: 'Usuarios',            section: 'Admin',          roles: ['administrador'] },

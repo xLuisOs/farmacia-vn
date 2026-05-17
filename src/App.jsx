@@ -22,7 +22,7 @@ const PAGES = {
   usuarios:    { component: Usuarios,         roles: ['administrador'] },
   'r-ventas':  { component: ReporteVentas,    roles: ['administrador'] },
   'r-ingresos': { component: IngresosVsEgresos, roles: ['administrador'] },
-  'r-alertas': { component: Alertas,         roles: ['administrador'] },
+  'r-alertas': { component: Alertas,          roles: ['administrador', 'cajero'] },
   config:      { component: Configuracion,   roles: ['administrador', 'cajero'] },
 }
 
