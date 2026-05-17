@@ -3,7 +3,7 @@ import { supabase } from '../packages/supabase'
 import { invalidarAlertas } from '../utils/alertUtils'
 import {
   FiPlus, FiX, FiTrash2, FiShoppingCart, FiRefreshCw,
-  FiAlertCircle, FiSearch, FiCheck, FiFileText
+  FiAlertCircle, FiSearch, FiCheck, FiFileText, FiDollarSign, FiBarChart2
 } from 'react-icons/fi'
 
 // ─── Estilos base ─────────────────────────────────────────────────────────────
@@ -292,10 +292,9 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
       <div style={{ position: 'fixed', inset: 0, background: 'rgba(10,25,50,.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }}>
         <div style={{ background: 'white', borderRadius: 18, width: '100%', maxWidth: 420, boxShadow: '0 30px 80px rgba(10,25,50,.25)', overflow: 'hidden' }}>
           <div style={{ background: 'linear-gradient(90deg,#1A3A5C,#2A5278)', padding: '18px 22px', borderRadius: '18px 18px 0 0' }}>
-            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>✅ Venta y factura completadas</div>
+            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>Venta y factura completadas</div>
           </div>
           <div style={{ padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, textAlign: 'center' }}>
-            <div style={{ fontSize: 48 }}>🧾</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: '#1A3A5C' }}>{numeroFactura}</div>
             <div style={{ fontSize: 12, color: '#6A9BB5' }}>
               Venta V-{String(idVentaCreada).padStart(4, '0')} registrada y facturada correctamente.
@@ -322,7 +321,7 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
       <div style={{ position: 'fixed', inset: 0, background: 'rgba(10,25,50,.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 20 }}>
         <div style={{ background: 'white', borderRadius: 18, width: '100%', maxWidth: 460, boxShadow: '0 30px 80px rgba(10,25,50,.25)', overflow: 'hidden' }}>
           <div style={{ background: 'linear-gradient(90deg,#1A3A5C,#2A5278)', padding: '18px 22px', borderRadius: '18px 18px 0 0' }}>
-            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>🧾 Emitir Factura</div>
+            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>Emitir Factura</div>
             <div style={{ color: '#7FD4DE', fontSize: 10, marginTop: 2 }}>
               Venta V-{String(idVentaCreada).padStart(4, '0')} registrada · completá los datos de la factura
             </div>
@@ -348,7 +347,7 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
         {/* Header */}
         <div style={{ background: 'linear-gradient(90deg,#1A3A5C,#2A5278)', padding: '18px 22px', borderRadius: '18px 18px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
           <div>
-            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>🛒 Nueva Venta</div>
+            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>Nueva Venta</div>
             <div style={{ color: '#7FD4DE', fontSize: 10, marginTop: 2 }}>El stock se descuenta automáticamente al confirmar</div>
           </div>
           <button onClick={onClose} style={{ background: 'rgba(255,255,255,.15)', border: 'none', color: 'white', width: 30, height: 30, borderRadius: '50%', cursor: 'pointer', fontSize: 16, fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -417,7 +416,7 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
           {/* Derecha: carrito */}
           <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#1A3A5C' }}>
-              🛒 Carrito ({carrito.length} producto{carrito.length !== 1 ? 's' : ''})
+              Carrito ({carrito.length} producto{carrito.length !== 1 ? 's' : ''})
             </div>
 
             {carrito.length === 0 ? (
@@ -455,7 +454,7 @@ function ModalNuevaVenta({ productos, usuario, onClose, onGuardado }) {
               <div style={{ display: 'flex', gap: 6 }}>
                 {['efectivo', 'tarjeta', 'transferencia'].map(m => (
                   <button key={m} onClick={() => setMetodo(m)} style={{ flex: 1, padding: '7px 4px', borderRadius: 7, border: `1.5px solid ${metodo === m ? '#1A3A5C' : '#E2F0F4'}`, background: metodo === m ? '#1A3A5C' : 'white', color: metodo === m ? 'white' : '#6A9BB5', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', textTransform: 'capitalize' }}>
-                    {m === 'efectivo' ? '💵' : m === 'tarjeta' ? '💳' : '🏦'} {m}
+                    {m}
                   </button>
                 ))}
               </div>
@@ -584,12 +583,12 @@ export default function Ventas({ user, darkMode }) {
     {/* Stats */}
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 16 }}>
       {[
-        { label: 'Ventas hoy',      value: ventasHoy.length,                                                                icon: '🛒' },
-        { label: 'Ingresos hoy',    value: `Q ${ingresosHoy.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,        icon: '💵' },
-        { label: 'Ticket promedio', value: `Q ${ticketPromedio.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,     icon: '📊' },
+        { label: 'Ventas hoy',      value: ventasHoy.length,                                                                icon: <FiShoppingCart size={20} />, color: '#5BBFCC' },
+        { label: 'Ingresos hoy',    value: `Q ${ingresosHoy.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,        icon: <FiDollarSign size={20} />, color: '#3DBD8A' },
+        { label: 'Ticket promedio', value: `Q ${ticketPromedio.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`,     icon: <FiBarChart2 size={20} />, color: '#3A6E9E' },
       ].map(s => (
         <div key={s.label} style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, padding: 14, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 40, height: 40, borderRadius: 10, background: darkMode ? '#2d3f60' : '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{s.icon}</div>
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: s.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: s.color }}>{s.icon}</div>
           <div>
             <div style={{ fontSize: 18, fontWeight: 800, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{s.value}</div>
             <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>{s.label}</div>
@@ -602,7 +601,7 @@ export default function Ventas({ user, darkMode }) {
     <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden' }}>
       <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>📋 Historial de ventas</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Historial de ventas</div>
           <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>Últimas 50 ventas</div>
         </div>
         <div style={{ position: 'relative' }}>

@@ -34,7 +34,7 @@ const guardar = async () => {
       }
 
       if (error) throw error;
-      alert("¡Usuario guardado con éxito! ✨");
+      alert("¡Usuario guardado con éxito! ");
       onClose();
       if (onSaved) onSaved();
     } catch (error) {
@@ -46,7 +46,7 @@ const guardar = async () => {
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
       <div style={{ background: 'white', borderRadius: 16, width: 440, boxShadow: '0 20px 60px rgba(0,0,0,.3)' }}>
         <div style={{ background: 'linear-gradient(90deg,#1A3A5C,#2A5278)', padding: '16px 20px', borderRadius: '16px 16px 0 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>{user ? '✏️ Editar Usuario' : '👤 Nuevo Usuario'}</span>
+          <span style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>{user ? 'Editar Usuario' : 'Nuevo Usuario'}</span>
           <button onClick={onClose} style={{ background: 'rgba(255,255,255,.15)', border: 'none', color: 'white', width: 28, height: 28, borderRadius: '50%', cursor: 'pointer', fontSize: 14, fontFamily: 'inherit' }}>✕</button>
         </div>
         <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>

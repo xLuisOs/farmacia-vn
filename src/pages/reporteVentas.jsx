@@ -266,7 +266,7 @@ export default function ReporteVentas({ darkMode }) {
       <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, padding: '16px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>📈 Ingresos por hora</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Ingresos por hora</div>
             <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>De 8:00 a 21:00 hrs</div>
           </div>
           {totalProductos > 0 && (
@@ -303,7 +303,7 @@ export default function ReporteVentas({ darkMode }) {
       <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden' }}>
         <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>📋 Detalle de ventas</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Detalle de ventas</div>
             <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>Click en cualquier fila para ver los productos vendidos</div>
           </div>
           {ventas.length > 0 && (

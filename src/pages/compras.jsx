@@ -4,7 +4,7 @@ import { invalidarAlertas } from '../utils/alertUtils'
 import {
   FiPlus, FiX, FiTrash2, FiPackage, FiTruck,
   FiCalendar, FiHash, FiDollarSign, FiAlertCircle,
-  FiChevronDown, FiRefreshCw, FiUserPlus
+  FiChevronDown, FiRefreshCw, FiUserPlus, FiUsers
 } from 'react-icons/fi'
 
 // ─── Estilos base reutilizables ───────────────────────────────────────────────
@@ -369,7 +369,7 @@ function ModalNuevaCompra({ proveedores, productos, usuario, onClose, onGuardado
           position: 'sticky', top: 0, zIndex: 1
         }}>
           <div>
-            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>🏪 Nueva Orden de Compra</div>
+            <div style={{ color: 'white', fontSize: 15, fontWeight: 700 }}>Nueva Orden de Compra</div>
             <div style={{ color: '#7FD4DE', fontSize: 10, marginTop: 2 }}>
               Los lotes se crean automáticamente al guardar
             </div>
@@ -628,12 +628,12 @@ export default function Compras({ user, darkMode }) {
           { label: 'Compras este mes', value: compras.filter(c => {
             const f = new Date(c.fecha); const h = new Date()
             return f.getMonth() === h.getMonth() && f.getFullYear() === h.getFullYear()
-          }).length, icon: '🏪' },
-          { label: 'Gasto del mes', value: `Q ${totalMes.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`, icon: '💵' },
-          { label: 'Proveedores activos', value: proveedores.filter(p => p.activo).length, icon: '🤝' },
+          }).length, icon: <FiTruck size={20} />, color: '#5BBFCC' },
+          { label: 'Gasto del mes', value: `Q ${totalMes.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`, icon: <FiDollarSign size={20} />, color: '#3DBD8A' },
+          { label: 'Proveedores activos', value: proveedores.filter(p => p.activo).length, icon: <FiUsers size={20} />, color: '#7C5CBF' },
         ].map(s => (
           <div key={s.label} style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, padding: 14, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: darkMode ? '#2d3f60' : '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>{s.icon}</div>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: s.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: s.color }}>{s.icon}</div>
             <div>
               <div style={{ fontSize: 18, fontWeight: 800, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{s.value}</div>
               <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>{s.label}</div>
@@ -690,7 +690,7 @@ export default function Compras({ user, darkMode }) {
       <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden' }}>
         <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>📋 Historial de compras</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Historial de compras</div>
             <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>Últimas 50 órdenes</div>
           </div>
           <button

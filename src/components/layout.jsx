@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react'
+import {
+  FiBarChart2, FiShoppingCart, FiBox, FiTruck, FiFileText,
+  FiTrendingUp, FiDollarSign, FiAlertTriangle, FiUsers, FiSettings
+} from 'react-icons/fi'
 
 const NAV = [
-  { id: 'dashboard',   icon: '📊', label: 'Dashboard',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
-  { id: 'ventas',      icon: '🛒', label: 'Ventas',              section: 'Menú principal', roles: ['administrador', 'cajero'] },
-  { id: 'inventario',  icon: '📦', label: 'Inventario',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
-  { id: 'compras',     icon: '🏪', label: 'Compras',             section: 'Menú principal', roles: ['administrador'] },
-  { id: 'facturacion', icon: '🧾', label: 'Facturación',         section: 'Menú principal', roles: ['administrador', 'cajero'] },
-  { id: 'r-ventas',    icon: '📈', label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador', 'cajero'] },
-  { id: 'r-ingresos',  icon: '💰', label: 'Ingresos vs Egresos', section: 'Reportes',       roles: ['administrador'] },
-  { id: 'r-alertas',   icon: '⚠️', label: 'Alertas',             section: 'Reportes',       roles: ['administrador', 'cajero'] },
-  { id: 'usuarios',    icon: '👥', label: 'Usuarios',            section: 'Admin',          roles: ['administrador'] },
-  { id: 'config',      icon: '⚙️', label: 'Configuración',       section: 'Admin',          roles: ['administrador', 'cajero'] },
+  { id: 'dashboard',   icon: <FiBarChart2 size={18} style={{ color: 'white' }} />, label: 'Dashboard',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'ventas',      icon: <FiShoppingCart size={18} style={{ color: 'white' }} />, label: 'Ventas',              section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'inventario',  icon: <FiBox size={18} style={{ color: 'white' }} />, label: 'Inventario',          section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'compras',     icon: <FiTruck size={18} style={{ color: 'white' }} />, label: 'Compras',             section: 'Menú principal', roles: ['administrador'] },
+  { id: 'facturacion', icon: <FiFileText size={18} style={{ color: 'white' }} />, label: 'Facturación',         section: 'Menú principal', roles: ['administrador', 'cajero'] },
+  { id: 'r-ventas',    icon: <FiTrendingUp size={18} style={{ color: 'white' }} />, label: 'Ventas diarias',      section: 'Reportes',       roles: ['administrador', 'cajero'] },
+  { id: 'r-ingresos',  icon: <FiDollarSign size={18} style={{ color: 'white' }} />, label: 'Ingresos vs Egresos', section: 'Reportes',       roles: ['administrador'] },
+  { id: 'r-alertas',   icon: <FiAlertTriangle size={18} style={{ color: 'white' }} />, label: 'Alertas',             section: 'Reportes',       roles: ['administrador', 'cajero'] },
+  { id: 'usuarios',    icon: <FiUsers size={18} style={{ color: 'white' }} />, label: 'Usuarios',            section: 'Admin',          roles: ['administrador'] },
+  { id: 'config',      icon: <FiSettings size={18} style={{ color: 'white' }} />, label: 'Configuración',       section: 'Admin',          roles: ['administrador', 'cajero'] },
 ]
 
 const ROUTABLE = ['dashboard', 'ventas', 'inventario', 'compras', 'facturacion', 'usuarios', 'r-ventas', 'r-ingresos', 'r-alertas', 'config']

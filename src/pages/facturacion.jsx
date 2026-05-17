@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../packages/supabase'
-import { FiRefreshCw, FiSearch, FiFileText } from 'react-icons/fi'
+import { FiRefreshCw, FiSearch, FiFileText, FiDollarSign, FiUser } from 'react-icons/fi'
 
 // ─── Estilos base ─────────────────────────────────────────────────────────────
 const TH = (darkMode) => ({
@@ -91,12 +91,12 @@ export default function Facturacion({ user, darkMode }) {
       {/* Stats del día */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 16 }}>
         {[
-          { label: 'Facturas emitidas hoy', value: facturasHoy.length,                                                     icon: '🧾' },
-          { label: 'Total facturado hoy',   value: `Q ${totalHoy.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`, icon: '💵' },
-          { label: 'Facturas CF (hoy)',      value: facturasCF,                                                             icon: '👤' },
+          { label: 'Facturas emitidas hoy', value: facturasHoy.length,                                                     icon: <FiFileText size={20} />, color: '#5BBFCC' },
+          { label: 'Total facturado hoy',   value: `Q ${totalHoy.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`, icon: <FiDollarSign size={20} />, color: '#3DBD8A' },
+          { label: 'Facturas CF (hoy)',      value: facturasCF,                                                             icon: <FiUser size={20} />, color: '#F97316' },
         ].map(s => (
           <div key={s.label} style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, padding: 14, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: darkMode ? '#2d3f60' : '#F0F8FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: s.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: s.color }}>
               {s.icon}
             </div>
             <div>
@@ -111,7 +111,7 @@ export default function Facturacion({ user, darkMode }) {
       <div style={{ background: darkMode ? '#1a2332' : 'white', borderRadius: 12, border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`, overflow: 'hidden' }}>
         <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}` }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>🧾 Historial de facturas</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Historial de facturas</div>
             <div style={{ fontSize: 10, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 1 }}>
               {facturas.length} factura{facturas.length !== 1 ? 's' : ''} registrada{facturas.length !== 1 ? 's' : ''}
             </div>
