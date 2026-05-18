@@ -21,9 +21,9 @@ export default function Dashboard({ darkMode }) {
       const fechaLimite = proximoMes.toISOString().split('T')[0]
 
       const { data: stockData, count: bajoStockCount } = await supabase
-        .schema('farmacia').from('producto')
-        .select('nombre, stock_actual', { count: 'exact' })
-        .lt('stock_actual', 10).limit(5)
+        .schema('farmacia').from('vista_stock_actual')
+        .select('producto, stock_actual, stock_minimo', { count: 'exact' })
+        .eq('alerta_stock_bajo', true).limit(5)
 
       const { count: vencerCount } = await supabase
         .schema('farmacia').from('lote')
@@ -33,8 +33,8 @@ export default function Dashboard({ darkMode }) {
 
       const { data: ventasData } = await supabase
         .schema('farmacia').from('venta').select('total')
-        .gte('fecha_venta', `${hoy}T00:00:00`)
-        .lte('fecha_venta', `${hoy}T23:59:59`)
+        .gte('fecha', `${hoy}T00:00:00`)
+        .lte('fecha', `${hoy}T23:59:59`)
 
       setStats({
         ventasDia: ventasData?.length || 0,
@@ -115,7 +115,7 @@ export default function Dashboard({ darkMode }) {
             <tbody>
               {productosBajoStock.length > 0 ? productosBajoStock.map((prod, idx) => (
                 <tr key={idx} style={{ borderBottom: `1px solid ${darkMode ? '#2d3f60' : '#F0F8FA'}` }}>
-                  <td style={{ padding: '12px 18px', fontSize: 12, fontWeight: 600, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{prod.nombre}</td>
+                  <td style={{ padding: '12px 18px', fontSize: 12, fontWeight: 600, color: darkMode ? '#ffffff' : '#1A3A5C' }}>{prod.producto}</td>
                   <td style={{ padding: '12px 18px', fontSize: 12, color: darkMode ? '#e0e0e0' : '#6A9BB5' }}>{prod.stock_actual} unid.</td>
                   <td style={{ padding: '12px 18px' }}>
                     <span style={{ fontSize: 10, fontWeight: 700, background: '#FFEDD5', color: '#EA580C', padding: '2px 8px', borderRadius: 20 }}>Stock bajo</span>

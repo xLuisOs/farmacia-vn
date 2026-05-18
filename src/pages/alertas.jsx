@@ -206,28 +206,29 @@ export default function Alertas({ darkMode, setHasNewAlerts }) {
   }
 
   return (
-    <div className="min-h-screen p-6" style={{ background: darkMode ? '#1a1f2e' : '#F0F8FA' }}>
-      <div className="max-w-6xl mx-auto">
+    <div style={{ padding: 16, background: darkMode ? '#1a1f2e' : '#F0F8FA' }}>
+      <div>
         {/* Encabezado */}
-        <div className="flex items-center justify-between mb-8">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3" style={{ color: darkMode ? '#ffffff' : '#1A3A5C' }}>
-              <FiAlertCircle size={32} style={{ color: '#DC2626' }} />
-              Alertas del Sistema
-            </h1>
-            <p className="text-sm mt-1" style={{ color: darkMode ? '#a0aec0' : '#6A9BB5' }}>
-              Monitoreo de vencimientos y stock bajo
-            </p>
+            <div style={{ fontSize: 24, fontWeight: 700, color: darkMode ? '#ffffff' : '#1A3A5C' }}>Alertas del Sistema</div>
+            <div style={{ fontSize: 13, color: darkMode ? '#a0aec0' : '#6A9BB5', marginTop: 4 }}>Monitoreo de vencimientos y stock bajo</div>
           </div>
-          <button
-            onClick={fetchAlertas}
-            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition font-medium"
-            style={{ background: '#1A3A5C' }}
-            onMouseEnter={(e) => e.target.style.background = '#243a52'}
-            onMouseLeave={(e) => e.target.style.background = '#1A3A5C'}
-          >
-            <FiRefreshCw size={18} />
-            Actualizar
+          <button onClick={fetchAlertas} style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '7px 12px',
+            borderRadius: 8,
+            fontSize: 11,
+            fontWeight: 700,
+            cursor: 'pointer',
+            border: `1.5px solid ${darkMode ? '#2d3f60' : '#E2F0F4'}`,
+            background: darkMode ? '#1a2332' : 'white',
+            color: darkMode ? '#a0aec0' : '#1A3A5C',
+            fontFamily: 'inherit'
+            }}>
+              <FiRefreshCw size={13} style={loading ? { animation: 'spin 1s linear infinite' } : {}}/>
           </button>
         </div>
 
