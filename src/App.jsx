@@ -28,13 +28,30 @@ const PAGES = {
 
 function AccesoDenegado({ onVolver, darkMode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: 12 }}>
+    <div style={{ display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  height: '60vh', 
+                  gap: 12 }}>
       <div style={{ fontSize: 48 }}>🚫</div>
-      <div style={{ fontSize: 18, fontWeight: 700, color: darkMode ? '#fff' : '#1A3A5C' }}>Acceso denegado</div>
-      <div style={{ fontSize: 12, color: darkMode ? '#a0aec0' : '#6A9BB5' }}>No tenés permisos para ver esta sección.</div>
+      <div style={{ fontSize: 18, 
+                    fontWeight: 700, 
+                    color: darkMode ? '#fff' : '#1A3A5C' }}>Acceso denegado</div>
+      <div style={{ fontSize: 12, 
+                    color: darkMode ? '#a0aec0' : '#6A9BB5' }}>No tenés permisos para ver esta sección.</div>
       <button
         onClick={onVolver}
-        style={{ marginTop: 8, padding: '8px 20px', borderRadius: 8, border: 'none', background: '#1A3A5C', color: 'white', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+        style={{  marginTop: 8, 
+                  padding: '8px 20px', 
+                  borderRadius: 8, 
+                  border: 'none', 
+                  background: '#1A3A5C', 
+                  color: 'white', 
+                  fontSize: 12, 
+                  fontWeight: 600, 
+                  cursor: 'pointer', 
+                  fontFamily: 'inherit' }}
       >
         Volver al Dashboard
       </button>
@@ -93,11 +110,28 @@ export default function App() {
   const PageComponent = tieneAcceso ? paginaActual.component : null
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: darkMode ? '#0f1419' : '#F0F8FA' }}>
-      <Layout activePage={activePage} setActivePage={setActivePage} onLogout={handleLogout} user={user} darkMode={darkMode} setDarkMode={setDarkMode} hasNewAlerts={hasNewAlerts} setHasNewAlerts={setHasNewAlerts} marcarAlertasVistas={marcarAlertasVistas}>
+    <div style={{ minHeight: '100vh', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  background: darkMode ? '#0f1419' : '#F0F8FA' }}>
+      <Layout activePage={activePage} 
+              setActivePage={setActivePage} 
+              onLogout={handleLogout} 
+              user={user} 
+              darkMode={darkMode} 
+              setDarkMode={setDarkMode} 
+              hasNewAlerts={hasNewAlerts} 
+              setHasNewAlerts={setHasNewAlerts} 
+              marcarAlertasVistas={marcarAlertasVistas}>
         {PageComponent
-          ? <PageComponent setActivePage={setActivePage} user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} setHasNewAlerts={setHasNewAlerts} />
-          : <AccesoDenegado onVolver={() => setActivePage('dashboard')} darkMode={darkMode} />
+          ? <PageComponent setActivePage={setActivePage} 
+                           user={user} 
+                           setUser={setUser} 
+                           darkMode={darkMode} 
+                           setDarkMode={setDarkMode} 
+                           setHasNewAlerts={setHasNewAlerts} />
+          : <AccesoDenegado onVolver={() => setActivePage('dashboard')} 
+                            darkMode={darkMode} />
         }
       </Layout>
     </div>
