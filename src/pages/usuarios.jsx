@@ -2,7 +2,7 @@ import { supabase } from '../packages/supabase'
 import { useState, useEffect } from 'react'
 import { FiPlus } from 'react-icons/fi'
 
-const BTN = { display: 'flex',
+const buttonBaseStyle = { display: 'flex',
               alignItems: 'center', 
               gap: 5,
               padding: '7px 14px', 
@@ -12,7 +12,7 @@ const BTN = { display: 'flex',
               cursor: 'pointer', 
               border: 'none' }
 
-const INPUT = { padding: '7px 10px', 
+const inputBaseStyle = { padding: '7px 10px', 
                 borderRadius: 7, 
                 border: '1.5px solid #E2F0F4',
                 fontSize: 11, color: '#1A3A5C',
@@ -103,7 +103,7 @@ const guardar = async () => {
                       marginBottom: 4 }}>NOMBRE COMPLETO</label>
             <input value={form.nombre_completo} 
                    onChange={e => set('nombre_completo', e.target.value)} 
-                   style={INPUT} />
+                   style={inputBaseStyle} />
           </div>
           <div>
             <label style={{ fontSize: 10,
@@ -113,7 +113,7 @@ const guardar = async () => {
                       marginBottom: 4 }}>NOMBRE DE USUARIO</label>
             <input value={form.nombre_usuario} 
                    onChange={e => set('nombre_usuario', e.target.value)} 
-                   style={INPUT} />
+                   style={inputBaseStyle} />
           </div>
           {!user && (
             <div>
@@ -123,7 +123,7 @@ const guardar = async () => {
                       display: 'block', 
                       marginBottom: 4 }}>CONTRASEÑA</label>
               <input type="password" placeholder="••••••••" 
-                     style={INPUT} 
+                     style={inputBaseStyle} 
                      onChange={e => set('password_hash', e.target.value)}/>
             </div>
           )}
@@ -168,11 +168,11 @@ const guardar = async () => {
                       justifyContent: 'flex-end', 
                       paddingTop: 8, 
                       borderTop: '1px solid #E2F0F4' }}>
-            <button onClick={onClose} style={{ ...BTN, background: 'white', 
+            <button onClick={onClose} style={{ ...buttonBaseStyle, background: 'white', 
                       color: '#1A3A5C', 
                       border: '1.5px solid #E2F0F4', 
                       fontFamily: 'inherit' }}>Cancelar</button>
-            <button onClick={guardar} style={{ ...BTN, background: '#1A3A5C',
+            <button onClick={guardar} style={{ ...buttonBaseStyle, background: '#1A3A5C',
                       color: 'white',
                       fontFamily: 'inherit' }}>💾 Guardar</button>
           </div>
